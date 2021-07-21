@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'user',
+    'category',
 
 ]
 
@@ -199,8 +200,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
-SOCIAL_AUTH_FACEBOOK_KEY = '501484047592986'
-SOCIAL_AUTH_FACEBOOK_SECRET = '5e7418b4c5b5ad7e81f199d24adbd16c'
+SOCIAL_AUTH_FACEBOOK_KEY = '815302215793103'
+SOCIAL_AUTH_FACEBOOK_SECRET = '2d80118eb189e272dc01455537749af8'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'email, first_name, last_name'
