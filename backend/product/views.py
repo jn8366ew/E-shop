@@ -16,7 +16,6 @@ class ReadProductView(APIView):
         except:
             return Response({'error': 'Product ID must be an integer'}, status=status.HTTP_404_NOT_FOUND)
 
-
         if Product.objects.filter(id=product_id).exists():
             product = Product.objects.get(id=product_id)
 
@@ -172,7 +171,7 @@ class ListRelatedView(APIView):
             else:
                 # 이 카테고리에 부모 카테고리가 없을 때 이 카테고리 자체를 필터링
                 if not Category.objects.filter(parent=category).exists():
-                    related_products = related_products.order_by(
+                    related_products = Product.objects.order_by(
                         '-sold'
                     ).filter(category=category)
 
@@ -185,7 +184,7 @@ class ListRelatedView(APIView):
                         filtered_categories.append(cat)
 
                     filtered_categories = tuple(filtered_categories)
-                    related_products = related_products.order_by(
+                    related_products = Product.objects.order_by(
                         '-sold'
                     ).filter(category__in=filtered_categories)
 
@@ -222,7 +221,7 @@ class ListBySearchView(APIView):
             return Response({'error': 'category_id must be an integer.'},
                             status=status.HTTP_404_NOT_FOUND)
         price_range = data['price_range']
-        sort_by = data['sort_by']
+        sort_by = data['sortBy']
 
         if not (sort_by == 'date_created' or sort_by == 'price' or
                 sort_by == 'sold' or sort_by == 'name'):

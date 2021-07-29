@@ -12,6 +12,7 @@ import Signup from './containers/Signup';
 import Activate from "./containers/Activate";
 import ResetPassword from "./containers/ResetPassword";
 import ResetPasswordConfirm from "./containers/ResetPasswordConfirm";
+import ProductDetail from "./containers/ProductDetail";
 
 import store from './store';
 
@@ -21,6 +22,7 @@ const App = () => (
             <Layout>
                 <Route exact path='/' component={Home} />
                 <Route exact path='/shop' component={Shop} />
+                <Route exact path='/product/:id' component={ProductDetail} />
                 <Route exact path='/dashboard' component={Dashboard} />
                 <Route exact path='/login' component={Login} />
                 <Route exact path='/signup' component={Signup} />
@@ -29,7 +31,6 @@ const App = () => (
                 <Route exact path='/google' component={Google} />
                 <Route exact path='/facebook' component={Facebook} />
                 <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm} />
-
             </Layout>
         </Router>
     </Provider>
