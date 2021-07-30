@@ -70,6 +70,29 @@ export default function(state= initialState, action) {
                 ...state,
                 product: null
             }
+        case RELATED_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                related_products: payload.related_products
+            }
+
+        case RELATED_PRODUCTS_FAIL:
+            return {
+                ...state,
+                related_products: null
+            }
+
+        case FILTER_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                filtered_products: payload.filtered_products
+            }
+
+        case FILTER_PRODUCTS_FAIL:
+            return {
+                ...state,
+                filtered_products: null
+            }
 
         default:
             return state;

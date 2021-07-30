@@ -262,20 +262,20 @@ class ListBySearchView(APIView):
                         category__in=filtered_categories)
 
         # 가격 대로 필터링
-        if price_range == '1 - 9':
+        if price_range == '1 - 19':
             product_results = product_results.filter(price__gte=1)
-            product_results = product_results.filter(price__lt=10)
-        elif price_range == '10 - 19':
-            product_results = product_results.filter(price__gte=10)
-            product_results = product_results.filter(price__lt=20)
-        elif price_range == '20 - 29':
+            product_results = product_results.filter(price__lt=19)
+        elif price_range == '20 - 39':
             product_results = product_results.filter(price__gte=20)
-            product_results = product_results.filter(price__lt=30)
-        elif price_range == '30 - 39':
-            product_results = product_results.filter(price__gte=30)
-            product_results = product_results.filter(price__lt=40)
-        elif price_range == 'More than 40':
+            product_results = product_results.filter(price__lt=39)
+        elif price_range == '40 - 59':
             product_results = product_results.filter(price__gte=40)
+            product_results = product_results.filter(price__lt=59)
+        elif price_range == '60 - 79':
+            product_results = product_results.filter(price__gte=60)
+            product_results = product_results.filter(price__lt=79)
+        elif price_range == 'More than 80':
+            product_results = product_results.filter(price__gte=80)
 
         # order와 sort_by에 의한 정렬(내림 // 올림차순)
         if order == 'desc':
