@@ -49,7 +49,8 @@ class ListProductsView(APIView):
         try:
             limit = int(limit)
         except:
-            return Response({'error': 'Limit must be an integer'})
+            return Response({'error': 'Limit must be an integer'},
+                            status=status.HTTP_404_NOT_FOUND)
 
         if limit <= 0:
             limit = 6
@@ -221,7 +222,7 @@ class ListBySearchView(APIView):
             return Response({'error': 'category_id must be an integer.'},
                             status=status.HTTP_404_NOT_FOUND)
         price_range = data['price_range']
-        sort_by = data['sortBy']
+        sort_by = data['sort_by']
 
         if not (sort_by == 'date_created' or sort_by == 'price' or
                 sort_by == 'sold' or sort_by == 'name'):
@@ -289,7 +290,7 @@ class ListBySearchView(APIView):
         product_results = ProductSerializer(product_results, many=True)
 
         if len(product_results.data) > 0:
-            return Response({'filtered_product': product_results.data},
+            return Response({'filtered_products': product_results.data},
                             status=status.HTTP_200_OK)
 
         else:

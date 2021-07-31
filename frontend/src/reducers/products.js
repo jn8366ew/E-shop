@@ -94,6 +94,18 @@ export default function(state= initialState, action) {
                 filtered_products: null
             }
 
+        case SEARCH_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                search_products: payload.search_products
+            }
+
+        case SEARCH_PRODUCTS_FAIL:
+            return {
+                ...state,
+                search_products: null
+            }
+
         default:
             return state;
     }
