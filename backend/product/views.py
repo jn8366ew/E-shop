@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from .models import Product
-from .serializer import ProductSerializer
+from .serializers import ProductSerializer
 from category.models import Category
 from django.db.models import Q
 

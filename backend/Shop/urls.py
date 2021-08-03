@@ -8,15 +8,22 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 
-    # Url for Djoser
+    # Urls for Djoser
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
+
+    # Url for apps
     path('api/category/', include('category.urls')),
     path('api/products/', include('product.urls')),
+    path('api/cart/', include('cart.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+
+
+# react에서 사용
+# 위에서 포함되지 않은 모든 url를 잡는다.
 urlpatterns += [re_path(r'^.*',
                         TemplateView.as_view(template_name='index.html'))]
 
