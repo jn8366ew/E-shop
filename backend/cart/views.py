@@ -87,7 +87,7 @@ class AddItemView(APIView):
                 if CartItem.objects.filter(cart=cart, product=product).exists():
                     # 카트에 있는 모든 제품의 수를 합한다.
                     total_items = int(cart.total_items) + 1
-                    Cart.object.filter(user=user).update(
+                    Cart.objects.filter(user=user).update(
                         total_items=total_items
                     )
 
@@ -139,9 +139,9 @@ class GetTotalView(APIView):
                     total_cost = round(total_cost, 2)
                     total_compare_cost = round(total_compare_cost, 2)
 
-                return Response({'total_cost': total_cost,
-                                 'total_compare_cost': total_compare_cost},
-                                status=status.HTTP_200_OK)
+            return Response({'total_cost': total_cost,
+                             'total_compare_cost': total_compare_cost},
+                            status=status.HTTP_200_OK)
 
         except:
             return Response({'error': 'Exception in GetTotalView'},
@@ -196,7 +196,7 @@ class UpdateItemView(APIView):
 
             # 카트에 상품이 없을경우
             if not CartItem.objects.filter(cart=cart, product=product).exists():
-                return Response({'error': 'No items in cart'},
+                return Response({'error': 'This product is not in your cart'},
                                 status=status.HTTP_404_NOT_FOUND)
 
 
@@ -265,7 +265,7 @@ class RemoveItemView(APIView):
             CartItem.objects.filter(cart=cart, product=product).delete()
 
             # 삭제 성공후 오브젝트가 남아 있을 경우 카트아이템의 total_item 값을 갱신.
-            if not CartItem.objects.filter(cart=cart, product=product).exists:
+            if not CartItem.objects.filter(cart=cart, product=product).exists():
                 total_items = int(cart.total_items) - 1
                 Cart.objects.filter(user=user).update(total_items=total_items)
 
@@ -308,12 +308,13 @@ class EmptyCartView(APIView):
             CartItem.objects.filter(cart=cart).delete()
 
             # Update cart to have no item
-            Cart.objects.filter(user=user).update(total_item=0)
+            Cart.objects.filter(user=user).update(total_items=0)
             return Response({'success': 'Cart emptied successfully.'},
                             status=status.HTTP_200_OK)
         except:
             return Response({'error': 'Exception in EmptyCartView'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class SyncCartView(APIView):
     def put(self, request, format=None):
@@ -321,22 +322,10 @@ class SyncCartView(APIView):
         data = self.request.data
 
         try:
-            cart_items = data['cart_item']
-            cart = Cart.objects.get(user=user)
-
-            # 구현 하려는 데이터
-            # [
-            #     {
-            #         'product_id': 5,
-            #         'count': 7
-            #     },
-            #     {
-            #         'product_id': 2,
-            #         'count': 1
-            #     }
-            # ]
+            cart_items = data['cart_items']
 
             for cart_item in cart_items:
+                cart = Cart.objects.get(user=user)
                 try:
                     product_id = int(cart_item['product_id'])
                 except:
@@ -393,6 +382,11 @@ class SyncCartView(APIView):
                             Cart.objects.filter(user=user).update(
                                 total_items=total_items
                             )
+
+            return Response(
+                {'success': 'Cart Synchronized'},
+                status=status.HTTP_201_CREATED
+            )
 
         except:
             return Response({'error': 'Exception in SyncCartView'},

@@ -14,6 +14,7 @@ urlpatterns = [
     path('auth/', include('djoser.social.urls')),
 
     # Url for apps
+    path('api/user/', include('user.urls')),
     path('api/category/', include('category.urls')),
     path('api/products/', include('product.urls')),
     path('api/cart/', include('cart.urls')),
