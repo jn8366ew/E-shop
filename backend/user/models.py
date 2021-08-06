@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import cart
 
+
+
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -10,13 +12,13 @@ class UserAccountManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
 
+        # password 파라미터는 set_password에 의해 해싱되어진다.
         user.set_password(password)
         user.save()
 
         # 유저를 생성할 떄 마다 카트를 하나씩 생성한다.
         shopping_cart = cart.models.Cart(user=user)
         shopping_cart.save()
-
 
         return user
 
@@ -38,6 +40,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     objects = UserAccountManager()
 
+    #
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
