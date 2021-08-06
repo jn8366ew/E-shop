@@ -55,6 +55,9 @@ class ListProductsView(APIView):
                 sort_by == 'sold' or sort_by == 'name'):
             sort_by = 'date_created'
 
+        if not sort_by:
+            sort_by = 'date_created'
+
         order = request.query_params.get('order')
         limit = request.query_params.get('limit')
 
@@ -277,18 +280,21 @@ class ListBySearchView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
         else:
             category = Category.objects.get(id=category_id)
-            # 카테고리에 부모가 있을경우 이 카테고리에만 필터 적용
+            # 카테고리에 부모가 있을경우 상품 오브젝트에 category 필터 적용
             if category.parent:
                 product_results = Product.objects.filter(category=category)
             else:
-                # 이 카테고리에 자식 카테고리가 없을 때 이 카테고리 자체를 필터링
+                # 이 카테고리에 부모가 없으면 상품 오브젝트에 category 필터 적용
                 if not Category.objects.filter(parent=category).exists():
                     product_results = Product.objects.filter(category=category)
 
-                # 이 부모 카테고리에 자식 카테고리 있을경우 두 카테고리를 필터
+                # 위 조건들이 거짓일 경우
+                # 이 카테고리를 부모로 갖는 하위 카테고리들을 추출
                 else:
                     categories = Category.objects.filter(parent=category)
+                    # category 자기 자신을 filtered_categories에 저장
                     filtered_categories = [category]
+
 
                     for cat in categories:
                         filtered_categories.append(cat)
