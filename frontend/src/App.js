@@ -14,6 +14,8 @@ import ResetPassword from "./containers/ResetPassword";
 import ResetPasswordConfirm from "./containers/ResetPasswordConfirm";
 import ProductDetail from "./containers/ProductDetail";
 import Search from "./containers/Search";
+import Cart from "./containers/Cart";
+import GoToCart from "./containers/GoToCart";
 
 import store from './store';
 
@@ -23,6 +25,8 @@ const App = () => (
             <Layout>
                 <Route exact path='/' component={Home} />
                 <Route exact path='/shop' component={Shop} />
+                <Route exact path='/cart' component={Cart} />
+                <Route exact path='/cart-or-continue-shopping' component={GoToCart} />
                 <Route exact path='/search' component={Search} />
                 <Route exact path='/product/:id' component={ProductDetail} />
                 <Route exact path='/dashboard' component={Dashboard} />

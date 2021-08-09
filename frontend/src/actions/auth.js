@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { setAlert } from './alert'
 import {
+    get_items,
+    get_item_total,
+    get_total,
+    synch_cart
+} from './cart'
+import {
     SIGNUP_SUCCESS,
     SIGNUP_FAIL,
     SET_AUTH_LOADING,
@@ -150,6 +156,7 @@ export const login = (email, password) => async dispatch => {
                 type: REMOVE_AUTH_LOADING
             });
             dispatch(setAlert('Logged in Successfully', 'success'));
+            dispatch(synch_cart());
         } else {
             dispatch({
                 type: LOGIN_FAIL,
@@ -205,6 +212,7 @@ export const google_authenticate = (state, code) => async dispatch => {
                     type: REMOVE_AUTH_LOADING
                 });
                 dispatch(setAlert('Google authentication success', 'success'));
+                dispatch(synch_cart());
             } else {
                 dispatch({
                     type:GOOGLE_AUTH_FAIL
@@ -259,6 +267,7 @@ export const facebook_authenticate = (state, code) => async dispatch => {
                     type: REMOVE_AUTH_LOADING
                 });
                 dispatch(setAlert('Facebook authentication success', 'success'));
+                dispatch(synch_cart());
             } else {
                 dispatch({
                     type:FACEBOOK_AUTH_FAIL
@@ -513,4 +522,8 @@ export const logout = () => dispatch => {
 
     });
     dispatch(setAlert('Logout', 'success'));
+    dispatch(get_items());
+    dispatch(get_item_total());
+    dispatch(get_total());
+
 }

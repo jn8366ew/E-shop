@@ -10,7 +10,7 @@ urlpatterns = [
     path('get-total', GetTotalView.as_view()),
     path('get-item-total', GetTotalItemView.as_view()),
     path('update-item', UpdateItemView.as_view()),
-    path('delete-item', RemoveItemView.as_view()),
+    path('remove-item', RemoveItemView.as_view()),
     path('empty-cart', EmptyCartView.as_view()),
     path('synch', SyncCartView.as_view()),
 

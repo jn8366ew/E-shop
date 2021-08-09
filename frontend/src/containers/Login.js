@@ -17,7 +17,6 @@ const Login = ({ login, isAuthenticated, loading}) => {
     });
 
     const {
-
         email,
         password
     } = formData;

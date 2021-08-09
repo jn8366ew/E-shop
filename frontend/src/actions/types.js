@@ -46,6 +46,35 @@ export const FILTER_PRODUCTS_SUCCESS = 'FILTER_PRODUCTS_SUCCESS';
 export const FILTER_PRODUCTS_FAIL = 'FILTER_PRODUCTS_FAIL';
 
 
+// Local Cart without Async
+export const ADD_ITEM = 'ADD_ITEM';
+export const GET_TOTAL = 'GET_TOTAL';
+export const GET_ITEM_TOTAL = 'GET_ITEM_TOTAL';
+export const GET_ITEMS = 'GET_ITEMS';
+export const UPDATE_ITEM = 'UPDATE_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const EMPTY_ITEM = 'EMPTY_CART';
+
+
+// Database Cart
+export const ADD_ITEM_SUCCESS = 'ADD_ITEM_SUCCESS ';
+export const ADD_ITEM_FAIL = 'ADD_ITEM_FAIL';
+export const GET_TOTAL_SUCCESS = 'GET_TOTAL_SUCCESS';
+export const GET_TOTAL_FAIL = 'GET_TOTAL_FAIL';
+export const GET_ITEM_TOTAL_SUCCESS = 'GET_ITEM_TOTAL_SUCCESS';
+export const GET_ITEM_TOTAL_FAIL = 'GET_ITEM_TOTAL_FAIL';
+export const GET_ITEMS_SUCCESS = 'GET_ITEMS_SUCCESS';
+export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
+export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS';
+export const UPDATE_ITEM_FAIL = 'UPDATE_ITEM_FAIL';
+export const REMOVE_ITEM_SUCCESS = 'REMOVE_ITEM_SUCCESS';
+export const REMOVE_ITEM_FAIL = 'REMOVE_ITEM_FAIL';
+export const EMPTY_ITEM_SUCCESS = 'EMPTY_ITEM_SUCCESS';
+export const EMPTY_ITEM_FAIL = 'EMPTY_ITEM_FAIL';
+export const SYNCH_CART_SUCCESS = 'SYNCH_CART_SUCCESS';
+export const SYNCH_CART_FAIL = 'SYNCH_CART_FAIL';
+
+
 // Alerts
 export const SET_ALERT = 'SET_ALERT';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
