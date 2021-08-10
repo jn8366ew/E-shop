@@ -7,14 +7,13 @@ const CartItem = ({
     count,
     update_item,
     remove_item,
-    get_items,
-    get_item_total,
-    get_total,
     setAlert,
     showViewProduct = true,
     showRemoveProduct = true,
     showUpdateProduct = true,
-    showQuantity = false
+    showQuantity = false,
+    render,
+    setRender
 }) => {
     const [formData, setFormData] = useState({
         item_count: 1
@@ -42,6 +41,8 @@ const CartItem = ({
                 else{
                     setAlert('Not enough in stock', 'danger')
                 }
+                setRender(!render);
+
             } catch(err) {
 
             }
@@ -114,10 +115,8 @@ const CartItem = ({
     };
 
     const removeItemHandler = async () => {
-        remove_item(item);
-        get_items();
-        get_item_total();
-        get_total();
+        await remove_item(item);
+        setRender(!render);
     }
 
 
@@ -196,7 +195,7 @@ const CartItem = ({
                             className='mr-2 text-muted'
                             style={{ textDecoration: 'line-through', fontSize: '16px'}}
                         >
-                            {
+                            ${
                                 item &&
                                 item !== null &&
                                 item !== undefined &&
@@ -209,7 +208,7 @@ const CartItem = ({
                         <span
                             style={{ fontSize: '16px', color: '#b12704'}}
                         >
-                            {
+                            ${
                                 item &&
                                 item !== null &&
                                 item !== undefined &&

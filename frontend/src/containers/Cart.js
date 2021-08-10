@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import { setAlert } from "../actions/alert";
@@ -26,6 +26,9 @@ const Cart = ({
       get_item_total,
       get_total
 }) => {
+
+    const [render, setRender] = useState(false);
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -33,7 +36,7 @@ const Cart = ({
         get_item_total();
         get_total();
 
-    }, []);
+    }, [render]);
     const showItems = () => {
         return (
             <div>
@@ -55,10 +58,9 @@ const Cart = ({
                                     count={count}
                                     update_item={update_item}
                                     remove_item={remove_item}
-                                    get_items={get_items}
-                                    get_item_total={get_item_total}
-                                    get_total={get_total}
                                     setAlert={setAlert}
+                                    render={render}
+                                    setRender={setRender}
                                 />
                             </div>
                         );

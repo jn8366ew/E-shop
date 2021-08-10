@@ -127,7 +127,7 @@ export default function(state= initialState, action){
             localStorage.setItem('cart', JSON.stringify(payload));
             return {
                 ...state,
-                items: JSON.stringify(localStorage.getItem('cart'))
+                items: JSON.parse(localStorage.getItem('cart'))
             };
 
         case REMOVE_ITEM_SUCCESS:

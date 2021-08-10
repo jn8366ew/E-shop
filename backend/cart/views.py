@@ -13,7 +13,7 @@ class GetItemView(APIView):
 
         try:
             cart = Cart.objects.get(user=user)
-            cart_items = CartItem.objects.filter(cart=cart)
+            cart_items = CartItem.objects.order_by('product').filter(cart=cart)
 
             result = []
 
@@ -92,7 +92,7 @@ class AddItemView(APIView):
                     )
 
 
-                cart_items = CartItem.objects.filter(cart=cart)
+                cart_items = CartItem.objects.order_by('product').filter(cart=cart)
 
                 result = []
 
@@ -209,7 +209,7 @@ class UpdateItemView(APIView):
                     product=product, cart=cart
                 ).update(count=count)
 
-                cart_items = CartItem.objects.filter(cart=cart)
+                cart_items = CartItem.objects.order_by('product').filter(cart=cart)
 
                 result = []
 
@@ -270,7 +270,7 @@ class RemoveItemView(APIView):
                 Cart.objects.filter(user=user).update(total_items=total_items)
 
             result = []
-            cart_items = CartItem.objects.filter(cart=cart)
+            cart_items = CartItem.objects.order_by('product').filter(cart=cart)
 
             # 카트아이템 삭제후 오브젝트가 남아있을 경우 재갱신한다.
             if CartItem.objects.filter(cart=cart).exists():
