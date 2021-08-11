@@ -16,6 +16,10 @@ import ProductDetail from "./containers/ProductDetail";
 import Search from "./containers/Search";
 import Cart from "./containers/Cart";
 import GoToCart from "./containers/GoToCart";
+import Checkout from "./containers/Checkout";
+
+
+import PrivateRoute from "./hocs/PrivateRoute";
 
 import store from './store';
 
@@ -26,6 +30,7 @@ const App = () => (
                 <Route exact path='/' component={Home} />
                 <Route exact path='/shop' component={Shop} />
                 <Route exact path='/cart' component={Cart} />
+                <PrivateRoute exact path='/checkout' component={Checkout} />
                 <Route exact path='/cart-or-continue-shopping' component={GoToCart} />
                 <Route exact path='/search' component={Search} />
                 <Route exact path='/product/:id' component={ProductDetail} />
