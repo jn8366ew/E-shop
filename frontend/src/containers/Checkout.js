@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
+import { refresh } from '../actions/auth'
 import CartItem from "../components/CartItem";
-import {setAlert} from "../actions/alert";
+import { get_shipping_options } from "../actions/shipping"
 
 
 
 const Checkout = ({
     items,
-    total_items
+    total_items,
+    refresh,
+    get_shipping_options,
+    shipping,
 }) => {
+    const [formData, setFormData] = useState({
+       shipping_id: 0,
+    });
+
+    const { shipping_id } = formData;
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onSubmit = e => {
+        e.prevenDefault();
+    };
+
+
+    useEffect(() => {
+        window.scrollTo(0,0);
+
+
+        // 새로운 엑세스 토큰을 받는다.
+        refresh();
+        get_shipping_options();
+    }, []);
     const showItems = () => {
         return (
             <div>
@@ -37,6 +60,36 @@ const Checkout = ({
             </div>
         );
     };
+
+    const renderShipping = () => {
+        if (shipping &&
+            shipping !== null &&
+            shipping !== undefined) {
+            return(
+                <div className='mb-5'>
+                    {
+                        shipping.map((shipping_option, index) => (
+                            <div key={index} className='form-check'>
+                                <input
+                                    className='form-check-input'
+                                    onClick={e => onChange(e)}
+                                    value={shipping_option.id}
+                                    name='shipping_id'
+                                    type='radio'
+                                    required
+                                />
+                                <label className='form-check-label'>
+                                    {shipping_option.name} - ${shipping_option.price} ({shipping_option.time_to_delivery})
+                                </label>
+                            </div>
+                        ))
+                    }
+                </div>
+            )
+        }
+    };
+
+
     return (
         <div className='container mt-5 mb-5'>
             <div className='row'>
@@ -44,7 +97,15 @@ const Checkout = ({
                     {showItems()}
                 </div>
                 <div className='col-5'>
+                    <h2 className='mb-3'>Order Summary</h2>
+                    <p>ORDER DETAILS</p>
+                    <form className='mt-5' Onsubmit={e => onSubmit(e)}>
+                        <h4 className='text-muted mb-3'>
+                            Select Shipping Option:
+                        </h4>
+                        {renderShipping()}
 
+                    </form>
                 </div>
             </div>
         </div>
@@ -53,8 +114,12 @@ const Checkout = ({
 
 const mapStateToProps = state => ({
    items: state.cart.items,
-   total_items: state.cart.total_items
+   total_items: state.cart.total_items,
+   shipping: state.shipping.shipping
 });
 
 
-export default connect(mapStateToProps, {})(Checkout);
+export default connect(mapStateToProps, {
+    refresh,
+    get_shipping_options,
+})(Checkout);
