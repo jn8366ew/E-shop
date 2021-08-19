@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'product',
     'cart',
     'orders',
+    'payment',
     'shipping',
 
 ]
@@ -203,6 +204,14 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'openid'
 ]
+
+
+BT_ENVIRONMENT = 'sandbox'
+BT_MERCHANT_ID = 'p26gkw7zzs999tfr'
+BT_PUBLIC_KEY = 'nwd26p23tq6n6ccs'
+BT_PRIVATE_KEY = 'b18642e9c22112b4579504310f010c67'
+
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 SOCIAL_AUTH_FACEBOOK_KEY = '815302215793103'
@@ -231,3 +240,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ilsanmwfshop@gmail.com'
 EMAIL_HOST_PASSWORD = 'otwfymsqhaknasds'
 EMAIL_USE_TLS = True
+
+
