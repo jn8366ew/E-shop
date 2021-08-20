@@ -38,17 +38,17 @@ const card = ({
                         overflow: 'hidden'
                     }}
                 >
-                    <img className='card-img-top' alt='Product Visual' src={product.photo}/>
+                    <img className='card-img-top' alt='Product Visual' src={product.photo} />
                 </div>
                 <p className='card-text mt-3' style={{height: '140px'}}>
-                    {product.description.substring(0, 100)}
+                    {product.description.substring(0, 100)}...
                 </p>
                 <p className='card-text text-muted'>
                 <span className='mr-2'>
                     Price:
                 </span>
-                    <span className='mr-3'
-                          style={{textDecoration: 'line-through'}}
+                <span className='mr-3'
+                    style={{textDecoration: 'line-through'}}
                     >
                     ${product.compare_price}
                 </span>

@@ -5,11 +5,13 @@ import categories from "./categories";
 import products from "./products";
 import cart from "./cart"
 import shipping from "./shipping";
+import payment from "./payment";
 
 export default combineReducers({
     auth,
     alert,
     categories,
+    payment,
     products,
     cart,
     shipping,
