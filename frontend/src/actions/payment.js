@@ -117,6 +117,8 @@ export const process_payment = (
                 type: PAYMENT_SUCCESS
             });
             dispatch(setAlert(res.data.success, 'success'));
+            dispatch(get_item_total());
+
         } else {
             dispatch({
                 type: PAYMENT_FAIL
@@ -140,5 +142,5 @@ export const process_payment = (
 export const reset = () => dispatch => {
     dispatch({
         type: RESET_PAYMENT_INFO
-    })
-}
+    });
+};

@@ -6,6 +6,7 @@ import products from "./products";
 import cart from "./cart"
 import shipping from "./shipping";
 import payment from "./payment";
+import orders from "./orders"
 
 export default combineReducers({
     auth,
@@ -15,5 +16,6 @@ export default combineReducers({
     products,
     cart,
     shipping,
+    orders,
 });
 

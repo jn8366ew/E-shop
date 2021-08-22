@@ -87,7 +87,6 @@ export default function(state= initialState, action) {
                 clientToken: null
             }
 
-
         default:
             return state;
     }

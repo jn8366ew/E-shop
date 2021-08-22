@@ -37,7 +37,7 @@ const App = () => (
                     <Route exact path='/cart-or-continue-shopping' component={GoToCart} />
                     <Route exact path='/search' component={Search} />
                     <Route exact path='/product/:id' component={ProductDetail} />
-                    <Route exact path='/dashboard' component={Dashboard} />
+                    <PrivateRoute exact path='/dashboard' component={Dashboard} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/signup' component={Signup} />
                     <Route exact path='/activate/:uid/:token' component={Activate} />

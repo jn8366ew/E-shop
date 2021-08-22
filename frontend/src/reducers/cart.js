@@ -112,7 +112,6 @@ export default function(state= initialState, action){
                 total_items: payload
             };
 
-
         case UPDATE_ITEM_SUCCESS:
             return {
                 ...state,

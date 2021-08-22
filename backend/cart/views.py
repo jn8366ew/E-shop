@@ -36,12 +36,8 @@ class GetItemView(APIView):
                     item['product'] = product.data
 
                     result.append(item)
-            if len(result) != 0:
                 return Response({'cart': result},
                                 status=status.HTTP_200_OK)
-            else:
-                return Response({'cart': result},
-                                status=status.HTTP_404_NOT_FOUND)
         except:
             return Response({'error': 'Exception in GetItemView'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)

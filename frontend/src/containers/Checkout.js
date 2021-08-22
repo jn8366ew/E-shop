@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { refresh } from '../actions/auth'
 import CartItem from "../components/CartItem";
@@ -9,7 +9,10 @@ import {
     get_client_token,
     process_payment
 } from '../actions/payment';
-
+import Loader from 'react-loader-spinner';
+import ShippingForm from "../components/ShippingForm";
+import DropIn from "braintree-web-drop-in-react";
+import { countries } from '../helpers/fixedCountries'
 
 
 const Checkout = ({
@@ -33,19 +36,56 @@ const Checkout = ({
     shipping_cost,
 }) => {
     const [formData, setFormData] = useState({
+        full_name: '',
+        address_line_1: '',
+        address_line_2: '',
+        city: '',
+        state_province_region: '',
+        postal_zip_code: '',
+        country_region: 'Republic of Korea',
+        telephone_number: '',
         shipping_id: 0,
     });
 
-    const {shipping_id} = formData;
-    const onChange = e => setFormData({...formData, [e.target.name]: e.target.value});
-    const onSubmit = e => {
-        e.prevenDefault();
-    };
+    const [data, setData] = useState ({
+        instance: {}
+    });
 
+
+    const {
+        full_name,
+        address_line_1,
+        address_line_2,
+        city,
+        state_province_region,
+        postal_zip_code,
+        country_region,
+        telephone_number,
+        shipping_id
+    } = formData;
+    const onChange = e => setFormData({...formData, [e.target.name]: e.target.value});
+
+    const buy = async e => {
+        e.preventDefault();
+
+        let nonce = await data.instance.requestPaymentMethod();
+
+        process_payment(
+            nonce,
+            shipping_id,
+            full_name,
+            address_line_1,
+            address_line_2,
+            city,
+            state_province_region,
+            postal_zip_code,
+            country_region,
+            telephone_number
+        );
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
-
 
         // 새로운 엑세스 토큰을 받는다.
         refresh();
@@ -202,11 +242,74 @@ const Checkout = ({
         return result;
     };
 
+    const renderPaymentInfo = () => {
+        if (!clientToken) {
+            if (!isAuthenticated) {
+                return (
+                    <Link
+                        className= 'btn btn-warning mt-5'
+                        style={{ width: '100%'}}
+                        to='/login'
+                    >
+                        Login to Proceed
+                    </Link>
+                );
+            } else {
+                return (
+                    <div className='mt-5 d-flex justify-content-center align-items-center'>
+                        <Loader
+                            type='Oval'
+                            color='#424242'
+                            height={50}
+                            width={50}
+                        />
+                    </div>
+                );
+            }
+        } else {
+            return (
+                <Fragment>
+                    <DropIn
+                        options={{
+                            authorization: clientToken,
+                            paypal: {
+                                flow: 'vault'
+                            }
+                        }}
+                        onInstance={instance => (data.instance = instance)}
+                    />
+                    {
+                        loading ? (
+                            <div className='d-flex justify-content-center align-items-center'>
+                                <Loader
+                                    type='Oval'
+                                    color='#424242'
+                                    height={50}
+                                    width={50}
+                                    />
+                            </div>
+                        ) : (
+                            <button
+                                className='btn btn-success'
+                                style={{
+                                    width: '100%'
+                                }}
+                                type='submit'
+                            > Place Order
 
+                            </button>
+                        )
+                    }
+                </Fragment>
+            );
+        }
 
-    if (made_payment) {
-        return (<Redirect to='/thankyou'/>);
     };
+
+
+    if (made_payment)
+        return <Redirect to='/thankyou'/>;
+
 
 
 
@@ -220,13 +323,22 @@ const Checkout = ({
                     <h2 className='mb-3'>Order Summary</h2>
                     <div style={{ fontSize: '18px' }}>
                         {displayTotal()}
-                        <form className='mt-5' Onsubmit={e => onSubmit(e)}>
-                            <h4 className='text-muted mb-3'>
-                                Select Shipping Option:
-                            </h4>
-                        {renderShipping()}
-                        </form>
                     </div>
+                    <ShippingForm
+                        full_name={full_name}
+                        address_line_1={address_line_1}
+                        address_line_2={address_line_2}
+                        city={city}
+                        state_province_region={state_province_region}
+                        postal_zip_code={postal_zip_code}
+                        country_region={country_region}
+                        telephone_number={telephone_number}
+                        countries = {countries}
+                        onChange={onChange}
+                        buy={buy}
+                        renderShipping={renderShipping}
+                        renderPaymentInfo={renderPaymentInfo}
+                    />
                 </div>
             </div>
         </div>

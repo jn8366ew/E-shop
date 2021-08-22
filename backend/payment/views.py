@@ -141,8 +141,9 @@ class ProcessPaymentView(APIView):
         telephone_number = data['telephone_number']
 
         if not Shipping.objects.filter(id__iexact=shipping_id).exists():
+            print("Invalid shipping option at shipping.objects.filter")
             return Response(
-                {'error': 'Invalid shipping option'},
+                {'error': 'Invalid shipping option at shipping.objects.filter'},
                 status=status.HTTP_404_NOT_FOUND
             )
 
@@ -150,6 +151,7 @@ class ProcessPaymentView(APIView):
 
         # 특정 유저 카트에 아이템들이 있는지 확인한다.
         if not CartItem.objects.filter(cart=cart).exists():
+            print("Invalid shipping option at CartItem.objects.filter")
             return Response(
                 {'error': 'Need to have items in cart'},
                 status=status.HTTP_404_NOT_FOUND
@@ -159,13 +161,14 @@ class ProcessPaymentView(APIView):
 
         # 카트에 있는 상품 id가 유효한지 확인
         for cart_item in cart_items:
-            if Product.objects.filter(id=cart_item.product.id).exists():
+            if not Product.objects.filter(id=cart_item.product.id).exists():
+                print("A product_id does not exist")
                 return Response(
                     {'error': 'A product_id does not exist.'},
                     status=status.HTTP_404_NOT_FOUND
                 )
 
-            if int(cart_item.count) > int(cart_items.product.quantity):
+            if int(cart_item.count) > int(cart_item.product.quantity):
                 return Response(
                     {'error': 'Not enough items in stock'},
                     status=status.HTTP_200_OK
@@ -179,7 +182,7 @@ class ProcessPaymentView(APIView):
 
 
         # 부가가치세 + 총금액
-        total_amount += (total_amount * tax)
+        total_amount += float(total_amount * tax)
 
         shipping = Shipping.objects.get(id=int(shipping_id))
 
@@ -238,7 +241,7 @@ class ProcessPaymentView(APIView):
                     postal_zip_code = postal_zip_code,
                     country_region = country_region,
                     telephone_number = telephone_number,
-                    shipping_name=shipping_name,
+                    shipping_name = shipping_name,
                     shipping_time = shipping_time,
                     shipping_price = float(shipping_price)
                 )

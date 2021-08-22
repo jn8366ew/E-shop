@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import { Link, NavLink } from "react-router-dom";
 import Alert from './Alert';
 import SearchBox from "./SearchBox";
+import dashBoard from "../containers/Dashboard";
 
 
 const Navbar = ({
@@ -87,6 +88,23 @@ const Navbar = ({
             </Fragment>
         );
 
+        const dashBoard = () => {
+            return (
+                <li className='nav-item'>
+                    <NavLink
+                        className='nav-link mt-1'
+                        to='/dashboard'
+                        >
+                        Dashboard
+                    </NavLink>
+                </li>
+            )
+        }
+
+
+
+
+
         const getNavbar = () => (
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
                 <Link className='navbar-brand' to='/'>Shop</Link>
@@ -113,6 +131,7 @@ const Navbar = ({
                             </NavLink>
                         </li>
 
+                        {isAuthenticated ? dashBoard() : <Fragment></Fragment>}
                         <SearchBox
                             search={search}
                             onChange={onChange}
