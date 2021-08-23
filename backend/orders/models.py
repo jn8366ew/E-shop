@@ -10,8 +10,9 @@ class Order(models.Model):
     class OrderStatus(models.TextChoices):
         not_processed = 'not_processed'
         processed = 'processed'
-        shipping = 'shipped'
-        delivered = 'delivered'
+        shipping = 'shipping'
+        shipped = 'shipped' \
+                  ''
         cancelled = 'cancelled'
 
     status = models.CharField(max_length=50,

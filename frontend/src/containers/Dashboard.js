@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
     get_items,
@@ -6,7 +7,7 @@ import {
     get_item_total
 } from "../actions/cart";
 import { list_orders } from "../actions/orders";
-
+import moment from 'moment';
 
 const DashBoard = ({
    get_items,
@@ -26,6 +27,22 @@ const DashBoard = ({
         get_item_total();
         list_orders();
     }, []);
+
+    const showStatus = (status) => {
+        if (status === 'not_processed') {
+            return 'Not Processed';
+        }
+        else if (status  === 'processed') {
+            return 'Processed'
+        }
+        else if (status === 'shipped') {
+            return 'Shipped'
+        }
+        else if (status === 'cancelled') {
+            return 'Cancelled'
+        }
+    };
+
 
     const userInfo = () => {
         return (
@@ -66,7 +83,82 @@ const DashBoard = ({
 
     const purchase_history = () => {
         return (
-            <div> purchase_history </div>
+            <div className='card mb-5'>
+                <h3 className= 'card-header'>
+                    purchase_history
+                </h3>
+                <div className='card-body'>
+                    {
+                        orders &&
+                        orders !== null &&
+                        orders !== undefined &&
+                        orders.map((order, index) =>(
+                            <div key={index}>
+                                <h3
+                                    className='mb-3'
+                                    style={{
+                                        color: '#b12704',
+                                        fontSize: '24px'
+                                    }}> Order {index + 1}
+                                </h3>
+
+                                <ul className='list-group mb-3'>
+                                    <li className='list-group-item'>
+                                        <div>
+                                            <h3
+                                                className='text-muted mb-3'
+                                                style={{
+                                                    fontSize: '18px'
+                                                }}
+                                            >
+                                                Order Status: {showStatus(order.status)}
+                                            </h3>
+                                            <h3
+                                                className='text-muted mb-3'
+                                                style={{
+                                                    fontSize: '18px'
+                                                }}
+                                            >
+                                                Order Details:
+                                            </h3>
+                                            <ul className='list-group mb-3'>
+                                                <li className='list-group-item'>
+                                                    Transaction ID: {order.transaction_id}
+                                                </li>
+                                                <li className='list-group-item'>
+                                                    Total cost of the order: ${order.amount.toFixed(2)}
+                                                </li>
+                                            </ul>
+                                            <h3
+                                                className='text-muted mb-3'
+                                                style={{
+                                                    fontSize: '18px'
+                                                }}
+                                            >
+                                                Additional Info:
+                                            </h3>
+                                            <ul className='list-group mb-3'>
+                                                <li className='list-group-item'>
+                                                    Shipping Price: ${order.shipping_price.toFixed(2)}
+                                                </li>
+                                                <li className='list-group-item'>
+                                                    Order Create: {moment(order.date_issued).fromNow()}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <Link
+                                            className='btn btn-info'
+                                            to={`/dashboard/order-detail/${order.transaction_id}`}
+                                            >
+                                            Order Details
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
         )
     }
 
@@ -96,36 +188,35 @@ const DashBoard = ({
                         <h3 className='card-header'>
                             Dashboard Links
                         </h3>
-                        <ul className='list-group'>
-                            <li
-                                className='list-group-item'
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setDisplay('user_info')}
-                            >
-                                {
-                                    display === 'user_info' ? (
-                                        <strong>User Info</strong>
-                                    ) : (
-                                        <Fragment>User Info</Fragment>
-                                    )
-                                }
+                            <ul className='list-group'>
+                                <li
+                                    className='list-group-item'
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => setDisplay('user_info')}
+                                >
+                                    {
+                                        display === 'user_info' ? (
+                                            <strong>User Info</strong>
+                                        ) : (
+                                            <Fragment>User Info</Fragment>
+                                        )
+                                    }
+                                </li>
+                                <li
+                                    className='list-group-item'
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => setDisplay('purchase_history')}
+                                >
+                                    {
+                                        display === 'purchase_history' ? (
+                                            <strong>Purchase History</strong>
+                                        ) : (
+                                            <Fragment>Purchase History</Fragment>
+                                        )
+                                    }
 
-                            </li>
-                            <li
-                                className='list-group-item'
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setDisplay('purchase_history')}
-                            >
-                                {
-                                    display === 'purchase_history' ? (
-                                        <strong>Purchase History</strong>
-                                    ) : (
-                                        <Fragment>Purchase History</Fragment>
-                                    )
-                                }
-
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
                     </div>
                 </div>
                 <div className='col-9'>

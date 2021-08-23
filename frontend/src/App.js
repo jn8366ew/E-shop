@@ -12,6 +12,7 @@ import Signup from './containers/Signup';
 import Activate from "./containers/Activate";
 import ResetPassword from "./containers/ResetPassword";
 import ResetPasswordConfirm from "./containers/ResetPasswordConfirm";
+import OrderItemDetail from "./containers/OrderItemDetail";
 import ProductDetail from "./containers/ProductDetail";
 import Search from "./containers/Search";
 import Cart from "./containers/Cart";
@@ -38,6 +39,7 @@ const App = () => (
                     <Route exact path='/search' component={Search} />
                     <Route exact path='/product/:id' component={ProductDetail} />
                     <PrivateRoute exact path='/dashboard' component={Dashboard} />
+                    <PrivateRoute exact path='/dashboard/order-detail/:transaction_id' component={OrderItemDetail} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/signup' component={Signup} />
                     <Route exact path='/activate/:uid/:token' component={Activate} />

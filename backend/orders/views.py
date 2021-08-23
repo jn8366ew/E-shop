@@ -32,6 +32,7 @@ class ListOrdersView(APIView):
                 item['transaction_id'] = order.transaction_id
                 item['amount'] = order.amount
                 item['date_issued'] = order.date_issued
+                item['shipping_price'] = order.shipping_price
 
                 result.append(item)
 
