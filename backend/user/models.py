@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import cart
-
+import user_profile
 
 
 class UserAccountManager(BaseUserManager):
@@ -12,13 +12,17 @@ class UserAccountManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
 
-        # password 파라미터는 set_password에 의해 해싱되어진다.
+        # password hashed by set_password method
         user.set_password(password)
         user.save()
 
-        # 유저를 생성할 떄 마다 카트를 하나씩 생성한다.
+        # 1:1 relationship for cart and user
         shopping_cart = cart.models.Cart(user=user)
         shopping_cart.save()
+
+        # 1:1 relationship
+        profile = user_profile.models.UserProfile(user=user)
+        profile.save()
 
         return user
 
