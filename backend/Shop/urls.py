@@ -16,6 +16,7 @@ urlpatterns = [
     # Url for apps
     path('api/user/', include('user.urls')),
     path('api/category/', include('category.urls')),
+    path('api/coupon/', include('coupons.urls')),
     path('api/products/', include('product.urls')),
     path('api/cart/', include('cart.urls')),
     path('api/shipping/', include('shipping.urls')),
