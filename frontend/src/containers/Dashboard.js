@@ -7,7 +7,14 @@ import {
     get_item_total
 } from "../actions/cart";
 import { list_orders } from "../actions/orders";
+import {
+    get_user_profile,
+    update_user_profile
+} from "../actions/profile"
+
 import moment from 'moment';
+import UserProfileForm from '../components/UserProfileForm';
+
 
 const DashBoard = ({
    get_items,
@@ -15,18 +22,80 @@ const DashBoard = ({
    get_item_total,
    list_orders,
    orders,
-   user
+   user,
+   profile,
+   get_user_profile,
+   update_user_profile,
 
 }) => {
     const [display, setDisplay] = useState('user_info')
+    const [formData, setFormData] = useState({
+        address_line_1: '',
+        address_line_2: '',
+        city: '',
+        state_province_region: '',
+        postal_zip_code: '',
+        telephone_number: '',
+        country_region: 'Repulic of Korea, South'
+    });
 
+    const {
+        address_line_1,
+        address_line_2,
+        city,
+        state_province_region,
+        postal_zip_code,
+        telephone_number,
+        country_region
+    } = formData;
+
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onSubmit = e => {
+        e.preventDefault();
+
+
+        update_user_profile(
+            address_line_1,
+            address_line_2,
+            city,
+            state_province_region,
+            postal_zip_code,
+            telephone_number,
+            country_region
+        );
+
+        window.scrollTo(0, 0);
+
+    };
 
     useEffect(() => {
-        get_items();
-        get_total();
-        get_item_total();
-        list_orders();
+        get_user_profile();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            get_items();
+            get_total();
+            get_item_total();
+            list_orders();
+        }
+    }, [user]);
+
+    // For the updating profile
+    useEffect(() => {
+        if (profile && profile !== null && profile !== undefined) {
+            setFormData({
+                address_line_1: profile.address_line_1,
+                address_line_2: profile.address_line_2,
+                city: profile.city,
+                state_province_region: profile.state_province_region,
+                postal_zip_code: profile.postal_zip_code,
+                telephone_number: profile.telephone_number,
+                country_region: profile.country_region
+            });
+        }
+    }, [profile]);
+
 
     const showStatus = (status) => {
         if (status === 'not_processed') {
@@ -85,7 +154,7 @@ const DashBoard = ({
         return (
             <div className='card mb-5'>
                 <h3 className= 'card-header'>
-                    purchase_history
+                    Purchase History
                 </h3>
                 <div className='card-body'>
                     {
@@ -162,6 +231,30 @@ const DashBoard = ({
         )
     }
 
+    const userProfile = () => {
+        if (profile && profile !== null && profile !== undefined) {
+            return (
+                <UserProfileForm
+                    address_line_1={address_line_1}
+                    address_line_2={address_line_2}
+                    city={city}
+                    state_province_region={state_province_region}
+                    postal_zip_code={postal_zip_code}
+                    telephone_number={telephone_number}
+                    country_region={country_region}
+                    onChange={onChange}
+                    onSubmit={onSubmit}
+                    profile={profile}
+                />
+            )
+        } else {
+            return (
+                <Fragment>
+
+                </Fragment>
+            );
+        }
+    }
 
 
     const renderData = () => {
@@ -171,7 +264,17 @@ const DashBoard = ({
                     {userInfo()}
                 </Fragment>
             );
-        } else if (display === 'purchase_history') {
+        }
+
+        else if (display === 'profile_info') {
+            return (
+                <Fragment>
+                    {userProfile()}
+                </Fragment>
+            )
+        }
+
+        else if (display === 'purchase_history') {
             return (
                 <Fragment>
                     {purchase_history()}
@@ -205,6 +308,20 @@ const DashBoard = ({
                                 <li
                                     className='list-group-item'
                                     style={{ cursor: 'pointer' }}
+                                    onClick={() => setDisplay('profile_info')}
+                                >
+                                    {
+                                        display === 'profile_info' ? (
+                                            <strong>User Profile</strong>
+                                        ) : (
+                                            <Fragment>User Profile</Fragment>
+                                        )
+                                    }
+                                </li>
+
+                                <li
+                                    className='list-group-item'
+                                    style={{ cursor: 'pointer' }}
                                     onClick={() => setDisplay('purchase_history')}
                                 >
                                     {
@@ -231,14 +348,14 @@ const DashBoard = ({
 const mapStateToProps = state => ({
     orders: state.orders.orders,
     user: state.auth.user,
-
+    profile: state.profile.profile
 });
 
 export default connect(mapStateToProps, {
     get_items,
     get_total,
     get_item_total,
-    list_orders
-
-
+    list_orders,
+    get_user_profile,
+    update_user_profile
 })(DashBoard);

@@ -13,7 +13,9 @@ const shippingForm = ({
     onChange,
     buy,
     renderShipping,
-    renderPaymentInfo
+    renderPaymentInfo,
+    user,
+    profile
 }) => (
     <form className='mt-5' onSubmit={e => buy(e)}>
         <h4 className='text-muted mb-3'>
@@ -27,7 +29,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='full_name'
-                placeholder='Full Name'
+                placeholder={`${user.first_name} ${user.last_name}`}
                 onChange={e => onChange(e)}
                 value={full_name}
                 required
@@ -39,7 +41,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='address_line_1'
-                placeholder='Address Line 1'
+                placeholder={`${profile.address_line_1}`}
                 onChange={e => onChange(e)}
                 value={address_line_1}
                 required
@@ -51,7 +53,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='address_line_2'
-                placeholder='Address Line 2'
+                placeholder={`${profile.address_line_2}`}
                 onChange={e => onChange(e)}
                 value={address_line_2}
                 required
@@ -63,7 +65,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='city'
-                placeholder='City'
+                placeholder={`${profile.city}`}
                 onChange={e => onChange(e)}
                 value={city}
                 required
@@ -75,7 +77,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='state_province_region'
-                placeholder='State/Province/Region'
+                placeholder={`${profile.state_province_region}`}
                 onChange={e => onChange(e)}
                 value={state_province_region}
                 required
@@ -87,7 +89,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='postal_zip_code'
-                placeholder='Postal/Zip Code'
+                placeholder={`${profile.postal_zip_code}`}
                 onChange={e => onChange(e)}
                 value={postal_zip_code}
                 required
@@ -102,7 +104,7 @@ const shippingForm = ({
                 name='country_region'
                 onChange={e => onChange(e)}
             >
-                <option value='Korea, (the Republic of), South'>Korea, (the Republic of), South</option>
+                <option value={`${profile.country_region}`}>{profile.country_region}</option>
                 {
                     countries &&
                     countries !== null &&
@@ -122,7 +124,7 @@ const shippingForm = ({
                 className='form-control'
                 type='text'
                 name='telephone_number'
-                placeholder='telephone_number'
+                placeholder={`${profile.telephone_number}`}
                 onChange={e => onChange(e)}
                 value={telephone_number}
                 required

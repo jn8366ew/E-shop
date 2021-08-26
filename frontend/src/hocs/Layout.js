@@ -7,7 +7,10 @@ import {
     get_items,
     get_item_total,
     get_total
-} from '../actions/cart'
+} from '../actions/cart';
+import {
+    get_user_profile
+} from '../actions/profile';
 
 const Layout = ({
     check_authenticated,
@@ -15,6 +18,7 @@ const Layout = ({
     refresh,
     get_items,
     get_item_total,
+    get_user_profile,
     get_total,
     children
 }) => {
@@ -26,6 +30,7 @@ const Layout = ({
         refresh();
         check_authenticated();
         load_user();
+        get_user_profile();
         get_items();
         get_item_total();
         get_total();
@@ -53,11 +58,13 @@ const Layout = ({
     );
 };
 
-export default connect(null,
-    {check_authenticated,
-                     load_user,
-                     refresh,
-                     get_items,
-                     get_item_total,
-                     get_total
+export default connect(null, {
+    check_authenticated,
+    load_user,
+    refresh,
+    get_items,
+    get_item_total,
+    get_total,
+    get_user_profile
+
     })(Layout);

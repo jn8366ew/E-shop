@@ -120,7 +120,7 @@ class Countries(models.TextChoices):
     Kazakhstan = 'Kazakhstan',
     Kenya = 'Kenya',
     Kiribati = 'Kiribati',
-    Republic_of_Korea = 'Korea (South)',
+    Republic_of_Korea = 'Korea, the Republic of, South',
     Kuwait = 'Kuwait',
     Kyrgyzstan = 'Kyrgyzstan',
     Lao_Peoples_Democratic_Republic = "Lao People's Democratic Republic",

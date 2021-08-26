@@ -3,6 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { refresh } from '../actions/auth'
 import CartItem from "../components/CartItem";
+import {
+    check_coupon
+} from "../actions/coupons";
 import { get_shipping_options } from "../actions/shipping"
 import {
     get_payment_total,
@@ -26,15 +29,21 @@ const Checkout = ({
     process_payment,
     isAuthenticated,
     user,
+    profile,
     clientToken,
     made_payment,
     loading,
     original_price,
     total_amount,
     total_compare_amount,
+    total_after_coupon,
     estimated_tax,
     shipping_cost,
+    check_coupon,
+    coupon,
+
 }) => {
+
     const [formData, setFormData] = useState({
         full_name: '',
         address_line_1: '',
@@ -44,6 +53,7 @@ const Checkout = ({
         postal_zip_code: '',
         country_region: 'Republic of Korea',
         telephone_number: '',
+        coupon_name: '',
         shipping_id: 0,
     });
 
@@ -61,33 +71,82 @@ const Checkout = ({
         postal_zip_code,
         country_region,
         telephone_number,
+        coupon_name,
         shipping_id
     } = formData;
     const onChange = e => setFormData({...formData, [e.target.name]: e.target.value});
+
+
+    // apply user's profile data to checkout textboxes
+    useEffect(() => {
+        if (profile &&
+            profile !== null &&
+            profile !== undefined &&
+            user &&
+            user !== null &&
+            user !== undefined ) {
+            setFormData({
+                ...formData,
+                full_name: user.first_name + ' ' + user.last_name,
+                address_line_1: profile.address_line_1,
+                address_line_2: profile.address_line_2,
+                city: profile.city,
+                state_province_region: profile.state_province_region,
+                postal_zip_code: profile.postal_zip_code,
+                telephone_number: profile.telephone_number,
+                country_region: profile.country_region
+            });
+        }
+    }, [profile, user]);
+
+
+    const apply_coupon = async e => {
+        e.preventDefault();
+
+        check_coupon(coupon_name);
+    };
+
 
     const buy = async e => {
         e.preventDefault();
 
         let nonce = await data.instance.requestPaymentMethod();
 
-        process_payment(
-            nonce,
-            shipping_id,
-            full_name,
-            address_line_1,
-            address_line_2,
-            city,
-            state_province_region,
-            postal_zip_code,
-            country_region,
-            telephone_number
-        );
+        if (coupon && coupon !== null && coupon !== undefined) {
+            process_payment(
+                nonce,
+                shipping_id,
+                coupon_name,
+                full_name,
+                address_line_1,
+                address_line_2,
+                city,
+                state_province_region,
+                postal_zip_code,
+                country_region,
+                telephone_number
+            );
+        } else {
+            process_payment(
+                nonce,
+                shipping_id,
+                '',
+                full_name,
+                address_line_1,
+                address_line_2,
+                city,
+                state_province_region,
+                postal_zip_code,
+                country_region,
+                telephone_number
+            );
+        }
     };
 
     useEffect(() => {
         window.scrollTo(0, 0);
 
-        // 새로운 엑세스 토큰을 받는다.
+        // get new access token.
         refresh();
         get_shipping_options();
     }, []);
@@ -97,8 +156,15 @@ const Checkout = ({
     }, [user]);
 
     useEffect(() => {
-        get_payment_total(shipping_id);
-    }, [shipping_id]);
+        if (coupon &&
+            coupon !== null &&
+            coupon !== undefined)
+        get_payment_total(shipping_id, coupon_name);
+
+        else
+            get_payment_total(shipping_id, '');
+
+    }, [shipping_id, coupon]);
 
 
     const showItems = () => {
@@ -159,7 +225,7 @@ const Checkout = ({
         }
     };
 
-    // 총 금액을 보여주는 화면
+    // display total cost
     const displayTotal = () => {
         let result = [];
 
@@ -167,7 +233,7 @@ const Checkout = ({
             <Fragment>
                 <span className='text-muted mr-3'>Items:</span>
                 <span
-                    className='mr-3 text-musted'
+                    className='mr-3 text-muted'
                     style={{
                         textDecoration: 'line-through'
                     }}
@@ -177,18 +243,43 @@ const Checkout = ({
             </Fragment>
         );
 
-        result.push(
-            <Fragment>
-                <span className='text-muted mr-3'>Items:</span>
-                <span
-                    style={{
-                        color: '#b12704'
-                    }}
-                >
-                    ${original_price}
-                </span>
-            </Fragment>
-        );
+
+        // If a coupon was applied
+        if (coupon && coupon !== null && coupon !== undefined) {
+            result.push(
+                <Fragment>
+                    <span
+                        style={{
+                            color: '#b12704',
+                            textDecoration: 'line-through'}
+                        }
+                    >
+                        ${original_price}
+                    </span>
+                    <div>
+                        <span className='text-muted mr-2'>
+                            Discounted Items:
+                        </span>
+                        <span style={{ color: '#b12704' }}>
+                            ${total_after_coupon}
+                        </span>
+                    </div>
+                </Fragment>
+            );
+        } else {
+            result.push(
+                <Fragment>
+                    <span
+                        style={{
+                            color: '#b12704',
+                            }}
+                    >
+                        ${original_price}
+                    </span>
+                </Fragment>
+            );
+        }
+
 
         // 배송
         if (shipping && shipping_id !== 0) {
@@ -219,7 +310,7 @@ const Checkout = ({
         result.push(
             <div className='mt-3'>
                 <span className='text-muted mr-3'>
-                    Estimated HST:
+                    Estimated Tax:
                 </span>
                 <span style={{ color: '#b12704'}}>
                     ${estimated_tax}
@@ -318,6 +409,43 @@ const Checkout = ({
             <div className='row'>
                 <div className='col-7'>
                     {showItems()}
+                    <h4 className='text-muted'>
+                        Gift cards &amp; promotional codes
+                    </h4>
+                    <form
+                        className='mt-3'
+                        style={{ width: '60%'}}
+                        onSubmit={e => apply_coupon(e)}
+                    >
+                        <div className='form-group'>
+                            <input
+                                className='form-control'
+                                name='coupon_name'
+                                type='text'
+                                placeholder='Enter Code'
+                                onChange={e => onChange(e)}
+                                value={coupon_name}
+                            />
+                        </div>
+                        {
+                            coupon &&
+                            coupon !== null &&
+                            coupon !== undefined ? (
+                                <div className='text-muted mt-2 mb-3'>
+                                    {coupon.name} coupon is applied
+                                </div>
+                            ) : (
+                                <Fragment></Fragment>
+                            )
+                        }
+
+                        <button
+                            className='btn btn-primary'
+                            type='submit'
+                        >
+                            Apply
+                        </button>
+                    </form>
                 </div>
                 <div className='col-5'>
                     <h2 className='mb-3'>Order Summary</h2>
@@ -338,6 +466,8 @@ const Checkout = ({
                         buy={buy}
                         renderShipping={renderShipping}
                         renderPaymentInfo={renderPaymentInfo}
+                        user={user}
+                        profile={profile}
                     />
                 </div>
             </div>
@@ -348,14 +478,17 @@ const Checkout = ({
 const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated,
     user: state.auth.user,
+    profile: state.profile.profile,
     items: state.cart.items,
     total_items: state.cart.total_items,
+    coupon: state.coupons.coupon,
     shipping: state.shipping.shipping,
     estimated_tax: state.payment.estimated_tax,
     clientToken: state.payment.clientToken,
     made_payment: state.payment.made_payment,
     loading: state.payment.loading,
     original_price: state.payment.original_price,
+    total_after_coupon: state.payment.total_after_coupon,
     total_amount: state.payment.total_amount,
     total_compare_amount: state.payment.total_compare_amount,
     shipping_cost: state.payment.shipping_cost
@@ -364,6 +497,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     refresh,
+    check_coupon,
     get_shipping_options,
     get_payment_total,
     get_client_token,

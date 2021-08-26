@@ -354,7 +354,7 @@ export const countries = [
         name: 'Kiribati'
     },
     {
-        name: 'Korea, (the Republic of), South'
+        name: 'Korea, the Republic of, South'
     },
     {
         name: 'Kuwait'
