@@ -1,9 +1,11 @@
 from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
 
-# 커스텀 유저 모델을 불러온다.
+# load custom models we made
 User = get_user_model()
 
+
+# Associate with DJOSER['SERIALIZERS'] in settings.py
 class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User

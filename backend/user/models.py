@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 import cart
 import user_profile
 
-
+# we define and expand different fields of user model related to other models.
+# Hence, we use BaseUserManager to customizing user model.
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -16,11 +17,11 @@ class UserAccountManager(BaseUserManager):
         user.set_password(password)
         user.save()
 
-        # 1:1 relationship for cart and user
+        # 1:1 Rel
         shopping_cart = cart.models.Cart(user=user)
         shopping_cart.save()
 
-        # 1:1 relationship
+        # 1:1 Rel
         profile = user_profile.models.UserProfile(user=user)
         profile.save()
 
@@ -41,10 +42,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    # Everytime when a user create an account,
+    # execute UserAccountManager.
     objects = UserAccountManager()
 
-    #
+
+    # Associate with Djoser Endpoints
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 

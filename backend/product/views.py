@@ -8,27 +8,26 @@ from django.db.models import Q
 
 
 
-
-
-
-
 class ReadProductView(APIView):
     """
-    하나의 상품 오브젝트를 읽는 기능
+    A view to retrieve a single product for any user
     url: api/products/product/<productId>
     """
 
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, productId, format=None):
+        # check productId whether integer or not
         try:
             product_id = int(productId)
         except:
-            return Response({'error': 'Product ID must be an integer'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Product ID must be an integer'},
+                            status=status.HTTP_404_NOT_FOUND)
 
+        # check a product associated with product_id whether exists
         if Product.objects.filter(id=product_id).exists():
-            product = Product.objects.get(id=product_id)
 
+            product = Product.objects.get(id=product_id)
             product = ProductSerializer(product)
 
 
@@ -43,10 +42,10 @@ class ReadProductView(APIView):
 
 class ListProductsView(APIView):
     """
-    복수의 상품 오브젝트를 읽어서 나열하는 기능, query parameter 사용
-    url: api/products/get-products
-
+    A view to retrieve multiple products for any user
+    url: api/products/get-products?order=<>&sortBy=<>?limit=<>
     """
+
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, format=None):
@@ -96,15 +95,15 @@ class ListProductsView(APIView):
 
 class ListSearchView(APIView):
     """
-    입력된 문자열을 바탕으로 product 오브젝트를 가져와서 나열하는 기능
+    A view retrieve products by category_id and search keyword
     url: api/products/search
-    포스트 방식을 이용한 이유:
-    1. 서버에 데이터(검색어)를 보내고 다시 불러들인다.
-    2. 다른 유저가 querystring을 보길 원치 않는다.
+    requests: (int)category_id, (str)search
     """
+
     permission_classes = (permissions.AllowAny, )
 
-    def post(self, request, format=None):
+    def get(self, request, format=None):
+        # retrieve requested JSON data from client
         data = self.request.data
 
         try:
@@ -114,23 +113,23 @@ class ListSearchView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
         search = data['search']
 
-        # 검색 필드 체크
+        # check search keyword
+        # if no keyword, retrieve all products.
         if len(search) == 0:
-            # 검색 조건이 없다면 모든 제품 가져오기
             search_results = Product.objects.order_by('-date_created').all()
         else:
-            # 검색 조건이 존재하다면, search data에 포함된 이름도 같이 description에 의해 필터링한다
+            # retrieve products associated with description or name
             search_results = Product.objects.filter(
                 Q(description__icontains=search) | Q(name__icontains=search)
             )
 
-        # 카테고리 전부 가져오기
+        # if category_id is 0, retrieve all products.
         if category_id == 0:
             search_results = ProductSerializer(search_results, many=True)
             return Response({'search_products': search_results.data},
                              status=status.HTTP_200_OK)
 
-        # 카테고리 id가 없을 때
+        # check category id whether exists.
         if not Category.objects.filter(id=category_id).exists():
             return Response({'Error': 'Category not found.'},
                             status=status.HTTP_404_NOT_FOUND)
@@ -138,34 +137,39 @@ class ListSearchView(APIView):
 
         category = Category.objects.get(id=category_id)
 
-        # category에 부모가 있을 때, 상품 오브젝트 정렬 -> 이 카테고리만 필터링한다.
+        # If this category has a parents, retrieve products related to the category.
         if category.parent:
             search_results = search_results.order_by(
                 '-date_created'
             ).filter(category=category)
 
-        # 부모 카테고리가 없을 때
+        # If this category does not have parents,
         else:
-            # 부모가 없고 자식도 아닌 카테고리일경우 -> 상품 오브젝트 정렬 -> 이 카테고리만 필터링한다.
+            # and does not have children, then retrieve product with this category.
             if not Category.objects.filter(parent=category).exists():
                 search_results = search_results.order_by(
                     '-date_created'
                 ).filter(category=category)
 
-            # 부모가 없고 자식 카테고리 있을경우 하위 카테고리도 포함시킨다. (루트 카테고리)
+            # and does have children, then it includes its children.
             else:
                 categories = Category.objects.filter(parent=category)
-                filtered_categories = [category]
 
+                # append and loop through this category
+                filtered_categories = [category]
                 for cat in categories:
                     filtered_categories.append(cat)
 
-                # 필터된 카테고리가 변경되지 않도록 튜플로 형변환
+                # convert categories to immutable type
                 filtered_categories = tuple(filtered_categories)
+
+                # retrieve products with categories
                 search_results = search_results.order_by(
                     '-date_created'
                 ).filter(category__in=filtered_categories)
 
+
+        # setting a nested serializer as we might have mutiple products
         search_results = ProductSerializer(search_results, many=True)
         return Response({'search_products': search_results.data},
                         status=status.HTTP_200_OK)
@@ -175,7 +179,10 @@ class ListSearchView(APIView):
 
 class ListRelatedView(APIView):
     """
-    productId가 가진 category를 바탕으로 오브젝트(들)를 나열. 자기자신은 제외
+    A view to retrieve products based on
+    a productId's category and exclude a product associated productId
+    for any user.
+
     url: api/products/related/<productId>
     """
 
@@ -189,7 +196,7 @@ class ListRelatedView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
 
 
-        # 이 아이디를 가진 상품이 없을 경우
+        # check a product whether it exists.
         if not Product.objects.filter(id=product_id).exists():
             return Response(
                 {'error': 'Product with this product ID does not exist'},
@@ -198,19 +205,20 @@ class ListRelatedView(APIView):
         category = Product.objects.get(id=product_id).category
 
         if Product.objects.filter(category=category).exists():
-            # 카테고리에 부모가 있을경우 이 카테고리에만 필터 적용
+            # If this category has a parents, retrieve products related to the category
             if category.parent:
                 related_products = Product.objects.order_by(
                     '-sold'
                 ).filter(category=category)
+            # If this category does not have parents
             else:
-                # 부모가 없고 자식도 아닌 카테고리일경우
+                # and does not have children, retrieve products with the category
                 if not Category.objects.filter(parent=category).exists():
                     related_products = Product.objects.order_by(
                         '-sold'
                     ).filter(category=category)
 
-                # 부모가 없고 자식 카테고리가 있을경우 자기 자신과 서브 카테고리 출력 (루트 카테고리)
+                # and does have children, retrieve products with sub-categories
                 else:
                     categories = Category.objects.filter(parent=category)
                     filtered_categories = [category]
@@ -223,14 +231,17 @@ class ListRelatedView(APIView):
                         '-sold'
                     ).filter(category__in=filtered_categories)
 
-            # 중요: 연관된 상품을 찾기 위해 우리가 보고 있는 상품 id는 배제한다.
+            # exclude a product from a queryset with product_id
             related_products = related_products.exclude(id=product_id)
             related_products = ProductSerializer(related_products, many=True)
 
+
+            # if product objects exist greater than 3, show 3 items.
             if len(related_products.data) > 3:
                 return Response({'related_products': related_products.data[:3]},
                                 status=status.HTTP_200_OK)
 
+            # if product objects exists greater than 0, show all.
             elif len(related_products.data) > 0:
                 return Response({'related_products': related_products.data},
                                 status=status.HTTP_200_OK)
@@ -247,8 +258,12 @@ class ListRelatedView(APIView):
 
 class ListBySearchView(APIView):
     """
-    만든 날짜/가격/판매순/이름 바탕으로 검색 후 상품 오브젝트를 나열
+    A view retrieve ordered products based on date_created,
+    sort_by, price_range, and sold for any user.
+
     url: api/products/by/search
+    request: (int)category_id, (str)price_range,
+            (str)sort_by, (str)order
     """
     permission_classes = (permissions.AllowAny, )
 
@@ -262,6 +277,7 @@ class ListBySearchView(APIView):
         price_range = data['price_range']
         sort_by = data['sort_by']
 
+        # check sort_by, default is date_created
         if not (sort_by == 'date_created' or sort_by == 'price' or
                 sort_by == 'sold' or sort_by == 'name'):
             sort_by = 'date_created'
@@ -271,30 +287,28 @@ class ListBySearchView(APIView):
 
         order = data['order']
 
-        # 카테고리 id = 0 -> 모든 카테고리
+        # if category_id is 0, return all products
         if category_id == 0:
             product_results = Product.objects.all()
 
         elif not Category.objects.filter(id=category_id).exists():
             return Response({'error': 'This category does not exist'},
                             status=status.HTTP_404_NOT_FOUND)
+
         else:
             category = Category.objects.get(id=category_id)
-            # 카테고리에 부모가 있을경우 상품 오브젝트에 category 필터 적용
+
             if category.parent:
                 product_results = Product.objects.filter(category=category)
             else:
-                # 이 카테고리에 부모가 없으면 상품 오브젝트에 category 필터 적용
+
                 if not Category.objects.filter(parent=category).exists():
                     product_results = Product.objects.filter(category=category)
 
-                # 위 조건들이 거짓일 경우
-                # 이 카테고리를 부모로 갖는 하위 카테고리들을 추출
                 else:
                     categories = Category.objects.filter(parent=category)
-                    # category 자기 자신을 filtered_categories에 저장
-                    filtered_categories = [category]
 
+                    filtered_categories = [category]
 
                     for cat in categories:
                         filtered_categories.append(cat)
@@ -303,7 +317,7 @@ class ListBySearchView(APIView):
                     product_results = Product.objects.filter(
                         category__in=filtered_categories)
 
-        # 가격 대로 필터링
+        # Filtering based on price_range
         if price_range == '1 - 19':
             product_results = product_results.filter(price__gte=1)
             product_results = product_results.filter(price__lt=19)
@@ -319,7 +333,7 @@ class ListBySearchView(APIView):
         elif price_range == 'More than 80':
             product_results = product_results.filter(price__gte=80)
 
-        # order와 sort_by에 의한 정렬(내림 // 올림차순)
+        # check order and sort_by, and apply filtering.
         if order == 'desc':
             sort_by = '-' + sort_by
             product_results = product_results.order_by(sort_by)

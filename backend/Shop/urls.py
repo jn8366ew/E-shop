@@ -1,10 +1,21 @@
-
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+"""
+Djoser urls for this project:
+auth/users/: Create a user
+auth/users/me/: Delete a user  
+auth/users/reset_password/: Reset a password via a user's email 
+auth/users/reset_password_confirm/: Confirm a password 
+                                    by a url above.      
+auth/jwt/create/: User login and create access and refresh token   
+auth/jwt/refresh/: Token refresh  
+auth/jwt/verify/: Verify a access token.
+"""
 
 urlpatterns = [
 
@@ -23,13 +34,17 @@ urlpatterns = [
     path('api/orders/', include('orders.urls')),
     path('api/payment/', include('payment.urls')),
     path('api/profile/', include('user_profile.urls')),
+    path('api/reviews/', include('reviews.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 
-# react에서 사용
-# 위에서 포함되지 않은 모든 url를 잡는다.
+# Using at React
+# Catch all urls not included urls above.
 urlpatterns += [re_path(r'^.*',
                         TemplateView.as_view(template_name='index.html'))]
+
+
+
 
