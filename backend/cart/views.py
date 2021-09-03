@@ -5,7 +5,6 @@ from .models import Cart, CartItem
 from product.models import Product
 from product.serializers import ProductSerializer
 
-# 카트 아이템
 
 class GetItemView(APIView):
     def get(self, request, format=None):

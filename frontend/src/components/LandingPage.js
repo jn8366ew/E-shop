@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Card from './Card'
+import orange_pic from "../assets/orange.png"
 
 const landingPage = ({
     products_arrival,
@@ -12,16 +13,19 @@ const landingPage = ({
     setRedirect,
 }) => (
     <div className='container'>
-        <div className='jumbotron mt-5'>
-            <h1 className='display-4'>This is jumbotron mt-5's display-4</h1>
-            <p className='lead'>This is p class, 'lead'</p>
+        <div className='jumbotron mt-5'
+            style={{
+                backgroundColor: "transparent",
+                backgroundImage: `url(${orange_pic}`
+                }}>
+            <h1 className='display-4'>Welcome to E-shop!</h1>
+            <p className='lead'></p>
             <hr className='my-4' />
-            <p>Hello</p>
-            <Link className='btn btn-primary btn-lg' to='/shop'>Shop</Link>
+            <Link className='btn btn-primary btn-lg' to='/shop'>Go to Shop</Link>
         </div>
 
         <section>
-            <h2 className='mt-5 mb-5 display-4'>Newest Arrival</h2>
+            <h2 className='mt-5 mb-5 display-4'>Newest Products</h2>
             <div className='row'>
                 {
                     products_arrival &&
@@ -44,7 +48,7 @@ const landingPage = ({
         </section>
 
         <section>
-            <h2 className='mt-5 mb-5 display-4'>Top Selling</h2>
+            <h2 className='mt-5 mb-5 display-4'>Top 3 Products</h2>
             <div className='row'>
                 {
                     products_sold &&

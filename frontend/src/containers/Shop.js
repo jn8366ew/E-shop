@@ -14,6 +14,7 @@ import {
 import { get_categories } from "../actions/categories";
 import Card from "../components/Card";
 import ShopForm from "../components/ShopForm";
+import orange_pic from "../assets/orange.png";
 
 
 const Shop = ({
@@ -129,10 +130,16 @@ const Shop = ({
 
     return (
         <div className='container'>
-            <div className='jumbotron mt-5'>
+            <div className='jumbotron mt-5'
+                 style={{
+                     backgroundColor: "transparent",
+                     backgroundImage: `url(${orange_pic}`
+                 }}
+            >
+
                 <h1 className='display-4'>Shop Page</h1>
                 <p className='lead'>
-                    className lead!
+                    We hope you to have exciting experience
                 </p>
             </div>
             <div className='row'>

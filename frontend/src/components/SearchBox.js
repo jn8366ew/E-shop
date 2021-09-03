@@ -39,7 +39,7 @@ const SearchBox = ({
                         className='form-control ml-2'
                         onChange={e => onChange(e)}
                         value={search}
-                        placeholder='Search for products'
+                        placeholder=''
                     />
                 </div>
             </span>

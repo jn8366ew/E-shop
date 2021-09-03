@@ -6,15 +6,29 @@ from django.conf.urls.static import static
 
 
 """
-Djoser urls for this project:
-auth/users/: Create a user
-auth/users/me/: Delete a user  
+Djoser urls
+auth/users/: Create a user request
+req: email, first_name, last_name, password, re_password 
+
+auth/users/activation/: Activate a user account 
+req: uid, token 
+
 auth/users/reset_password/: Reset a password via a user's email 
+req: email
+
 auth/users/reset_password_confirm/: Confirm a password 
-                                    by a url above.      
-auth/jwt/create/: User login and create access and refresh token   
+by a url above.
+req: uid, token, new_password, re_new_password
+      
+auth/jwt/create/: User login. If success,
+create access and refresh token 
+req: email, password 
+  
 auth/jwt/refresh/: Token refresh  
+req: refresh
+
 auth/jwt/verify/: Verify a access token.
+req: token (access_token)
 """
 
 urlpatterns = [

@@ -22,7 +22,7 @@ const CartItem = ({
     // destructuring
     const { item_count } = formData
 
-    // count가 언제든지 갱신될 때 마다
+    // when update item_count
     useEffect(() => {
         if (count)
             setFormData({...formData, item_count: count})
@@ -137,7 +137,7 @@ const CartItem = ({
         <div className='card mb-5' style={{ padding: '20px 30px' }}>
             <div className='row'>
 
-                {/*이미지 구역*/}
+                {/*image*/}
                 <div className='col-3'>
                     <div style={{ height: '180px', overflow: 'hidden'}}>
                         <img

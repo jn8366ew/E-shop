@@ -24,6 +24,7 @@ class ReadProductView(APIView):
             return Response({'error': 'Product ID must be an integer'},
                             status=status.HTTP_404_NOT_FOUND)
 
+
         # check a product associated with product_id whether exists
         if Product.objects.filter(id=product_id).exists():
 
@@ -102,7 +103,7 @@ class ListSearchView(APIView):
 
     permission_classes = (permissions.AllowAny, )
 
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         # retrieve requested JSON data from client
         data = self.request.data
 
@@ -171,6 +172,7 @@ class ListSearchView(APIView):
 
         # setting a nested serializer as we might have mutiple products
         search_results = ProductSerializer(search_results, many=True)
+        print(search_results)
         return Response({'search_products': search_results.data},
                         status=status.HTTP_200_OK)
 

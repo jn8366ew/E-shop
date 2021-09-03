@@ -201,6 +201,7 @@ export const get_search_products = (search, category_id) => async dispatch =>{
 
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/products/search`, body, config);
+        console.log(res)
 
         if (res.status === 200) {
             dispatch({
