@@ -264,12 +264,6 @@ const ProductDetail = ({
             />
 
             <hr />
-            <section className='mt-5'>
-                <h2 className='mt-5'>Related Products:</h2>
-                <div className='row mt-5 ml-5 mr-5'>
-                    {getRelatedProducts()}
-                </div>
-            </section>
 
             <section className='mt-5 mb-5'>
                 <div className='row'>
@@ -331,6 +325,15 @@ const ProductDetail = ({
                 </div>
 
             </section>
+
+            <section className='mt-5'>
+                <h2 className='mt-5'>Related Products:</h2>
+                <div className='row mt-5 ml-5 mr-5'>
+                    {getRelatedProducts()}
+                </div>
+            </section>
+
+
 
         </div>
     )
