@@ -12,8 +12,21 @@ import {
     get_item_total
 } from '../actions/cart'
 
+
+import {
+    get_reviews,
+    get_review,
+    create_review,
+    update_review,
+    delete_review,
+    filter_review,
+} from "../actions/reviews";
+
 import Card from "../components/Card";
 import ProductDetailCard from "../components/ProductDetailCard";
+import LeaveReview from "../components/LeaveReview";
+import Reviews from "../components/Reviews";
+import Stars from "../components/Stars";
 
 const ProductDetail = ({
     match,
@@ -24,18 +37,140 @@ const ProductDetail = ({
     add_item,
     get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    isAuthenticated,
+    review,
+    reviews,
+    get_reviews,
+    get_review,
+    create_review,
+    update_review,
+    delete_review,
+    filter_review,
 }) => {
+    const [loginRedirect, setLoginRedirect] = useState(false);
     const [redirect, setRedirect] = useState(false);
+
+    const [formData, setFormData] = useState({
+        comment: ''
+    });
+
+    const [rating, setRating] = useState(5.0)
+    const { comment } = formData;
+
+
+    //
+    useEffect(() => {
+        if (
+            isAuthenticated !== null &&
+            isAuthenticated !== undefined
+        ) {
+            if (
+                isAuthenticated &&
+                review &&
+                review !== null &&
+                review !== undefined &&
+                review.comment &&
+                review.comment !== null &&
+                review.comment !== undefined
+            ) {
+               setFormData({
+                   comment: review.comment
+               });
+            } else {
+                setFormData({
+                    comment: ''
+                })
+            }
+        }
+        // when review updates, isAuthenticated also updates.
+    }, [review, isAuthenticated]);
+
+
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
         const productId = match.params.id;
         get_product(productId);
         get_related_products(productId);
-        // url의 productId가 변경될때 마다
-        // 액션 크리에이터를 다시 재시작하기 위해 [match.params.id]를 사용한다.
+
+        // use match.params.id to restart action creators
+        // by changing product_id in url.
     }, [match.params.id]);
+
+
+
+    // useEffect for get_reviews
+    useEffect(() => {
+        const productId = match.params.id;
+        get_reviews(productId);
+    }, [match.params.id ]);
+
+
+    // useEffect for get_review
+    useEffect(() => {
+        const productId = match.params.id;
+        get_review(productId);
+    }, [match.params.id, isAuthenticated]);
+
+
+    const onChange = e => setFormData({...formData, [e.target.name]: e.target.value});
+
+    const requireLogin = e => {
+        e.preventDefault();
+
+        setLoginRedirect(true);
+    }
+
+    // create review function
+    const leaveReview = e => {
+        e.preventDefault();
+
+        const productId = match.params.id;
+
+        if (rating !== null)
+            create_review(productId, rating, comment)
+    };
+
+    const updateReview = e => {
+        e.preventDefault();
+
+        const productId = match.params.id;
+
+        if (rating !== null)
+            update_review(productId, rating, comment);
+    };
+
+    const deleteReview = () => {
+        const productId = match.params.id;
+
+        const fetchData = async () => {
+            await delete_review(productId);
+            await get_review(productId);
+            setRating(5.0);
+            setFormData({
+                comment: ''
+            });
+        };
+
+        fetchData();
+
+    };
+
+    const filterReviews = (numStars) => {
+        const productId = match.params.id;
+
+        filter_review(productId, numStars);
+
+    };
+
+    const getReviews = () => {
+        const productId = match.params.id;
+
+        get_reviews(productId)
+    }
+
 
     const getRelatedProducts = () => {
         if (
@@ -52,12 +187,67 @@ const ProductDetail = ({
                         get_items={get_items}
                         get_total={get_total}
                         get_item_total={get_item_total}
+                        setLoginRedirect={setLoginRedirect}
                         setRedirect={setRedirect}
+
                     />
                 </div>
             ))
         }
     };
+
+    const getLeaveReviewComponent = () => {
+        if (isAuthenticated) {
+            // For create a review
+            if (
+                review &&
+                review !== null &&
+                review !== undefined &&
+                Object.keys(review).length === 0
+            ) {
+                return (
+                    <LeaveReview
+                        review={review}
+                        rating={rating}
+                        setRating={setRating}
+                        onSubmit={leaveReview}
+                        onChange={onChange}
+                        comment={comment}
+                    />
+                );
+            }
+            // logic for update review
+            else if (
+                    review &&
+                    review !== null &&
+                    review !== undefined &&
+                    Object.keys(review).length !== 0) {
+                        return (
+                            <LeaveReview
+                                review={review}
+                                rating={rating}
+                                setRating={setRating}
+                                onSubmit={updateReview}
+                                onChange={onChange}
+                                comment={comment}
+                                deleteReview={deleteReview}
+                            />
+                        );
+                    }
+            } else {
+                return (
+                    <button
+                        className='btn btn-info'
+                        onClick={requireLogin}
+                    >
+                        Login to write a review
+                    </button>
+                );
+            }
+    };
+
+    if (loginRedirect)
+        return <Redirect to='/login' />
 
     if (redirect)
         return <Redirect to='/cart-or-continue-shopping' />;
@@ -80,13 +270,84 @@ const ProductDetail = ({
                     {getRelatedProducts()}
                 </div>
             </section>
+
+            <section className='mt-5 mb-5'>
+                <div className='row'>
+                    <div className='col-3'>
+                        <h2 className='mb-3'>Filter Reviews</h2>
+                        <button
+                            className='btn btn-primary btn-sm mb-3'
+                            onClick={getReviews}
+                        >
+                            All
+                        </button>
+                        <div
+                            className='mb-3'
+                            style={{ cursor: 'pointer '}}
+                            onClick={() => filterReviews(5)}
+                        >
+                            <Stars rating={5.0} />
+                        </div>
+                        <div
+                            className='mb-3'
+                            style={{ cursor: 'pointer '}}
+                            onClick={() => filterReviews(4)}
+                        >
+                            <Stars rating={4.0} />
+                        </div>
+                        <div
+                            className='mb-3'
+                            style={{ cursor: 'pointer '}}
+                            onClick={() => filterReviews(3)}
+                        >
+                            <Stars rating={3.0} />
+                        </div>
+                        <div
+                            className='mb-3'
+                            style={{ cursor: 'pointer '}}
+                            onClick={() => filterReviews(2)}
+                        >
+                            <Stars rating={2.0} />
+                        </div>
+                        <div
+                            className='mb-3'
+                            style={{ cursor: 'pointer '}}
+                            onClick={() => filterReviews(1)}
+                        >
+                            <Stars rating={1.0} />
+                        </div>
+
+
+                        <h2>Write a Review</h2>
+                        <p className='mb-3'>
+                            Your review is a great help for customers and seller
+                        </p>
+                        {getLeaveReviewComponent()}
+                    </div>
+                    <div className='col-7 offset-2'>
+                        <h2 className='mb-5'>Customer Reviews</h2>
+                        <Reviews reviews={reviews} />
+                    </div>
+                </div>
+
+            </section>
+
         </div>
     )
 };
 
+
+
+
+
+
 const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
     product: state.products.product,
-    related_products: state.products.related_products
+    related_products: state.products.related_products,
+    review: state.reviews.review,
+    reviews: state.reviews.reviews
+
 });
 
 export default connect(mapStateToProps, {
@@ -95,5 +356,12 @@ export default connect(mapStateToProps, {
     add_item,
     get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    get_reviews,
+    get_review,
+    create_review,
+    update_review,
+    delete_review,
+    filter_review,
+
 })(ProductDetail);

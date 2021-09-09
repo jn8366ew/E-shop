@@ -84,9 +84,7 @@ class GetProductReviewView(APIView):
                 result['date_created'] = review.date_created
                 result['user'] = review.user.first_name
 
-
-
-
+            
             return Response({'review': result},
                             status=status.HTTP_200_OK)
 
@@ -115,7 +113,7 @@ class CreateProductReviewView(APIView):
         except:
             return Response(
                 {'error': 'Rating must be float type.'},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_400_BAD_REQUEST
             )
 
 
@@ -175,7 +173,7 @@ class CreateProductReviewView(APIView):
                     item['id'] = review.id
                     item['rating'] = review.rating
                     item['comment'] = review.comment
-                    item['data_created'] = review.date_created
+                    item['date_created'] = review.date_created
                     item['user'] = review.user.first_name
 
                     results.append(item)
@@ -203,7 +201,7 @@ class UpdateProductReviewView(APIView):
             rating = float(data['rating'])
         except:
             return Response({'error': 'Rating must be float type'},
-                            status=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
         try:
@@ -254,13 +252,13 @@ class UpdateProductReviewView(APIView):
                     item['id'] = review.id
                     item['rating'] = review.rating
                     item['comment'] = review.comment
-                    item['data_created'] = review.date_created
+                    item['date_created'] = review.date_created
                     item['user'] = review.user.first_name
 
                     results.append(item)
 
             return Response({'review': result, 'reviews': results},
-                            status=status.HTTP_201_CREATED)
+                            status=status.HTTP_200_OK)
 
         except:
             return Response({'error': 'Error in UpdateReviewView'},
@@ -352,7 +350,7 @@ class FilterProductReviewView(APIView):
 
         except:
             return Response({'error': 'Rating must be float type'},
-                            status=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             if not rating:

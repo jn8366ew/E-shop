@@ -12,15 +12,21 @@ const card = ({
     get_item_total,
     setRedirect,
 
+
 }) => {
 
     const addToCart = async () => {
-        if (product.quantity > 0) {
+        if (
+            product &&
+            product !== null &&
+            product !== undefined &&
+            product.quantity > 0) {
             await add_item(product);
             await get_items();
             await get_total();
             await get_item_total();
             setRedirect(true);
+
         }
     };
 
