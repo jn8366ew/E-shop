@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { activate } from '../actions/auth';
 import {Redirect} from "react-router-dom";
@@ -20,6 +21,12 @@ const Activate = ({ match, loading, activate }) => {
 
     return (
         <div className='container'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Helmet application" />
+                <title>E-Shop | Activate</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <div
                 className='d-flex justify-content-center align-items-center flex-column'
                 style={{ marginTop: '200px'}}

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
+
+
 import { reset_password } from "../actions/auth";
 import Loader from 'react-loader-spinner';
 
@@ -31,9 +34,16 @@ const ResetPassword = ({ loading, reset_password }) => {
 
     return (
         <div className='container mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="ResetPassword Request Helmet application" />
+                <title>E-Shop | ResetPassword Request</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <h1 className='mb-5'>Request Password Reset:</h1>
             <form onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
+
                     <input
                         className='form-control mb-3'
                         type='email'

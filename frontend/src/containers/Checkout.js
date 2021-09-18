@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { refresh } from '../actions/auth'
+import { refresh } from '../actions/auth';
+import { Helmet } from 'react-helmet';
 import CartItem from "../components/CartItem";
 import {
     check_coupon
@@ -406,6 +407,12 @@ const Checkout = ({
 
     return (
         <div className='container mt-5 mb-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Checkout Helmet application" />
+                <title>E-Shop | Checkout</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <div className='row'>
                 <div className='col-7'>
                     {showItems()}

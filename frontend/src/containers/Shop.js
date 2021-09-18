@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { get_products,
          get_filtered_products
@@ -130,6 +131,12 @@ const Shop = ({
 
     return (
         <div className='container'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Shop Helmet application" />
+                <title>E-Shop | Shop</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <div className='jumbotron mt-5'
                  style={{
                      backgroundColor: "transparent",

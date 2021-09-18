@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import {
     get_items,
     get_total,
@@ -285,6 +286,12 @@ const DashBoard = ({
 
     return (
         <div className='container mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Dashboard application" />
+                <title>E-Shop | Dashboard</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <div className='row'>
                 <div className='col-3'>
                     <div className='card'>

@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
+
+
 import { get_products_by_arrival,
         get_products_by_sold
 } from "../actions/products";
@@ -44,16 +47,24 @@ const Home = ({
         return <Redirect to='/cart-or-continue-shopping' />;
 
     return (
-        <LandingPage
-            // props of LandingPage
-            products_arrival={products_arrival}
-            products_sold={products_sold}
-            add_item={add_item}
-            get_items={get_items}
-            get_total={get_total}
-            get_item_total={get_item_total}
-            setRedirect={setRedirect}
-        />
+        <Fragment>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Home Helmet application" />
+                <title>E-Shop | Home</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
+            <LandingPage
+                // props of LandingPage
+                products_arrival={products_arrival}
+                products_sold={products_sold}
+                add_item={add_item}
+                get_items={get_items}
+                get_total={get_total}
+                get_item_total={get_item_total}
+                setRedirect={setRedirect}
+            />
+        </Fragment>
     );
 };
 

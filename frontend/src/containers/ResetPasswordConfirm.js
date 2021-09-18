@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { reset_password_confirm } from "../actions/auth";
 import Loader from 'react-loader-spinner';
@@ -39,6 +40,12 @@ const ResetPasswordConfirm = ({ match, loading, reset_password_confirm }) => {
 
     return (
         <div className='container mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="ResetPassword Confirm Helmet application" />
+                <title>E-Shop | ResetPassword Confirm</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <h1 className='mb-5'>Reset your password:</h1>
             <form onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>

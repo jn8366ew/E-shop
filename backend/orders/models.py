@@ -18,7 +18,8 @@ class Order(models.Model):
     status = models.CharField(max_length=50,
                               choices=OrderStatus.choices,
                               default=OrderStatus.not_processed)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # leave a user's records even though user data is deleted
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     transaction_id = models.CharField(max_length=255, unique=True)
     amount = models.DecimalField(max_digits=5, decimal_places=2)
     full_name = models.CharField(max_length=255)

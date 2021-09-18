@@ -37,7 +37,10 @@ class GetProductReviewsView(APIView):
                     item['rating'] = review.rating
                     item['comment'] = review.comment
                     item['date_created'] = review.date_created
-                    item['user'] = review.user.first_name
+                    if review.user:
+                        item['user'] = review.user.first_name
+                    else:
+                        item['user'] = 'Anonymous'
 
                     results.append(item)
 
@@ -174,7 +177,10 @@ class CreateProductReviewView(APIView):
                     item['rating'] = review.rating
                     item['comment'] = review.comment
                     item['date_created'] = review.date_created
-                    item['user'] = review.user.first_name
+                    if review.user:
+                        item['user'] = review.user.first_name
+                    else:
+                        item['user'] = 'Anonymous'
 
                     results.append(item)
 
@@ -253,7 +259,10 @@ class UpdateProductReviewView(APIView):
                     item['rating'] = review.rating
                     item['comment'] = review.comment
                     item['date_created'] = review.date_created
-                    item['user'] = review.user.first_name
+                    if review.user:
+                        item['user'] = review.user.first_name
+                    else:
+                        item['user'] = 'Anonymous'
 
                     results.append(item)
 
@@ -285,27 +294,26 @@ class DeleteProductReviewView(APIView):
                                 status=status.HTTP_404_NOT_FOUND)
 
             product = Product.objects.get(id=product_id)
-
-            # get과 filter 비교
+            results = []
 
             if Review.objects.filter(user=user, product=product).exists():
-
                 Review.objects.filter(product=product, user=user).delete()
-                results = []
 
-                if Review.objects.filter(product=product).exists():
-                    reviews = Review.objects.order_by('-date_created').filter(product=product_id)
+                reviews = Review.objects.order_by('-date_created').filter(product=product)
 
-                    for review in reviews:
-                        item = {}
+                for review in reviews:
+                    item = {}
 
-                        item['id'] = review.id
-                        item['rating'] = review.rating
-                        item['comment'] = review.comment
-                        item['date_created'] = review.date_created
+                    item['id'] = review.id
+                    item['rating'] = review.rating
+                    item['comment'] = review.comment
+                    item['date_created'] = review.date_created
+                    if review.user is None:
+                        item['user'] = 'Anonymous'
+                    else:
                         item['user'] = review.user.first_name
+                    results.append(item)
 
-                        results.append(item)
 
                 return Response({'Reviews': results},
                                 status=status.HTTP_200_OK)
@@ -385,7 +393,10 @@ class FilterProductReviewView(APIView):
                     item['rating'] = review.rating
                     item['comment'] = review.comment
                     item['date_created'] = review.date_created
-                    item['user'] = review.user.first_name
+                    if review.user:
+                        item['user'] = review.user.first_name
+                    else:
+                        item['user'] = 'Anonymous'
 
                     results.append(item)
 

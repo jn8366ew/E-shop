@@ -1,4 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import { setAlert } from "../actions/alert";
@@ -106,6 +107,12 @@ const Cart = ({
 
     return (
         <div className='container  mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Cart Helmet application" />
+                <title>E-Shop | Cart</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <div className='row'>
                 <div className='col-8'>
                     <h2>Your Items:</h2>

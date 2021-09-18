@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { signup } from "../actions/auth";
@@ -64,7 +65,14 @@ const Signup = ({ signup, isAuthenticated, loading}) => {
         <Redirect to='/login' />;
 
     return (
+
         <div className='container mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Sign up Helmet application" />
+                <title>E-Shop | Sign up</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <h1>Sign up</h1>
             <p>Create your account</p>
             <form onSubmit={e => onSubmit(e)}>

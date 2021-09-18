@@ -335,15 +335,43 @@ class ProcessPaymentView(APIView):
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR
                     )
 
+            order_items = OrderItem.objects.filter(order=order)
+            order_item_text = '\n\nOrder Item Details'
+            order_item_count = 1
+
+            for ordered_item in order_items:
+                order_item_text += "\n\nOrder Item " + str(order_item_count) + ':'
+                order_item_text += "\nOrdered Item Name: " + str(ordered_item.name)
+                order_item_text += "\nOrdered Item Price: $" + str(ordered_item.price)
+                order_item_text += "\nOrdered Item Count: " + str(ordered_item.count)
+                order_item_count += 1
+
             # 주문서를 주문한 User의 메일로 보낸다
+
             try:
                 send_mail(
-                    'Your Order Details',
-                    'Dear ' + full_name + ',\n\n' +
-                    'We received your order.\n' +
-                    'We are processing your order. Thank you.\n' +
-                    'Sincerely,\n' +
-                    'Shop',
+                    'Notification of Order Detail from E-Shop',
+                    'Dear ' + full_name + ','
+                    + '\n\nWe recieved your order!'
+                    + '\n\nHere are the details of your order:'
+                    + '\nOrder Transaction ID: ' +
+                    str(newTransaction.transaction.id)
+                    + '\nOrder Total: $' + str(total_amount)
+                    + '\nCoupon Used: ' + str(coupon_name)
+                    + '\n\nShipping Details:'
+                    + '\nAddress Line 1: ' + address_line_1
+                    + '\nAddress Line 2: ' + address_line_2
+                    + '\nCity: ' + city
+                    + '\nState/Province/Region: ' + state_province_region
+                    + '\nPostal/Zip Code: ' + postal_zip_code
+                    + '\nCountry/Region: ' + country_region
+                    + '\n\nContact Number: ' + telephone_number
+                    + '\n\nShipping Option Details:'
+                    + '\nShipping Name: ' + shipping_name
+                    + '\nShipping Price: $' + str(shipping_price)
+                    + order_item_text
+                    + '\n\nSincerely,'
+                    + '\nE-Shop',
                     'ilsanmwfshop@gmail.com',
                     [user.email],
                     fail_silently=False
@@ -353,6 +381,36 @@ class ProcessPaymentView(APIView):
                     {'error': 'Transaction succeeded and order created, but failed to sending an email.'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
+
+            try:
+                send_mail(
+                    '[Important]Order was created.',
+                    '\n\nOrder Details:'
+                    + '\n\nFull Name: ' + full_name
+                    + '\nEmail: ' + user.email
+                    + '\nOrder Transaction ID: ' +
+                    str(newTransaction.transaction.id)
+                    + '\nOrder Total: $' + str(total_amount)
+                    + '\nCoupon Used: ' + str(coupon_name)
+                    + '\n\nShipping Details:'
+                    + '\nAddress Line 1: ' + address_line_1
+                    + '\nAddress Line 2: ' + address_line_2
+                    + '\nCity: ' + city
+                    + '\nState/Province/Region: ' + state_province_region
+                    + '\nPostal/Zip Code: ' + postal_zip_code
+                    + '\nCountry/Region: ' + country_region
+                    + '\n\nContact Number: ' + telephone_number
+                    + '\n\nShipping Option Details:'
+                    + '\nShipping Name: ' + shipping_name
+                    + '\nShipping Price: $' + str(shipping_price)
+                    + order_item_text,
+                    'trionseung@gmail.com',
+                    ['trionseung@gmail.com'],
+                    fail_silently=False
+                )
+            except:
+                print("didn't work for business mail")
+
 
             try:
                 CartItem.objects.filter(cart=cart).delete()

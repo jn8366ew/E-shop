@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { Redirect } from "react-router-dom";
 import {
     add_item,
@@ -23,6 +24,12 @@ const Search = ({
 
     return (
         <div className='container mt-5'>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="Search Helmet application" />
+                <title>E-Shop | Search</title>
+                {/* <link rel="canonical" href="http://mysite.com/example" /> */}
+            </Helmet>
             <h2 className='text-muted mb-5'>
                 Found {
                 search_products &&
