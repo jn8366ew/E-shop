@@ -74,7 +74,7 @@ export const get_review = product_id => async dispatch => {
         }
 
     }
-}
+};
 
 
 export const create_review = (product_id, rating, comment) => async dispatch => {
@@ -173,6 +173,7 @@ export const delete_review = (product_id) => async dispatch => {
             );
 
             if (res.status === 200) {
+                console.log("Action Delete:", res.data)
                 dispatch({
                     type: DELETE_REVIEW_SUCCESS,
                     payload: res.data

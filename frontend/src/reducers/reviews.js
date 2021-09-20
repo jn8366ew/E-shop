@@ -75,11 +75,11 @@ export default function(state = initialState, action) {
             }
 
         case DELETE_REVIEW_SUCCESS:
+            console.log("Reducer", payload.reviews);
             return {
                 ...state,
                 review: {},
-                reviews: []
-
+                reviews: payload.reviews
             }
 
         case DELETE_REVIEW_FAIL:

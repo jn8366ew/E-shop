@@ -315,7 +315,7 @@ class DeleteProductReviewView(APIView):
                     results.append(item)
 
 
-                return Response({'Reviews': results},
+                return Response({'reviews': results},
                                 status=status.HTTP_200_OK)
             else:
                 return Response({'error:': 'A review for this product does not exist'},

@@ -149,14 +149,13 @@ const ProductDetail = ({
 
         const fetchData = async () => {
             await delete_review(productId);
-            await get_reviews(productId);
+            console.log(reviews)
+            await get_review(productId);
             setFormData({
                 comment: ''
             });
         };
-
         fetchData();
-
     };
 
     const filterReviews = (numStars) => {
