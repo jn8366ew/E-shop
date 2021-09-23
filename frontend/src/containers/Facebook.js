@@ -7,8 +7,6 @@ import Loader from 'react-loader-spinner';
 
 
 const Facebook = ({ facebook_authenticate }) => {
-    // const is a signal that the variable won’t be reassigned.
-    // let is a signal that the variable may be reassigned.
     const [redirect, setRedirect] = useState(false);
     let location = useLocation();
 

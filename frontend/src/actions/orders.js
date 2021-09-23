@@ -18,7 +18,7 @@ export const list_orders = () => async dispatch => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders/get-orders`, config);
 
-            // status 200일 시 result 리스트에 담긴 item 데이터를 받는다.
+
             if (res.status === 200) {
                 dispatch({
                     type: GET_ORDERS_SUCCESS,
@@ -50,7 +50,7 @@ export const get_order_detail = transactionId => async dispatch => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders/get-order/${transactionId}`, config);
 
-            // status 200일 시 result 리스트에 담긴 item 데이터를 받는다.
+
             if (res.status === 200) {
                 dispatch({
                     type: GET_ORDER_DETAIL_SUCCESS,

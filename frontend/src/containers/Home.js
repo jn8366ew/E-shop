@@ -69,7 +69,6 @@ const Home = ({
 };
 
 
-// 2개의 리덕스 state를 불러온다
 const mapStateToProps = state => ({
     products_arrival: state.products.products_arrival,
     products_sold: state.products.products_sold
