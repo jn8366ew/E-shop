@@ -1,5 +1,5 @@
 # E-shop
-Implemented by Team orange and Bryan 
+Implemented by Team Orange and Bryan 
 
 ## Desciprtion 
 * A web application for E-commerce with Django and React 
