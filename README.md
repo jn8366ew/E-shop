@@ -13,8 +13,8 @@ Implemented by Team Orange and Bryan
 * Postgresql (11) 
  
 ## Functionality
-* User Authentication(Registration, Login, Google OAuth2)
-* User Profile 
+* User authentication(Registration, Login, Google OAuth2)
+* User dashboard 
 * Ordering products 
 * Store products in cart 
 * Cart Sync between unregistered users and members   
@@ -27,7 +27,6 @@ Implemented by Team Orange and Bryan
 ### General site flow with a member
 ![flow](https://user-images.githubusercontent.com/80245390/134449014-7a23625f-52ce-4ee8-a28a-270f5e51e906.gif)
 <br><br>
-
 
 ### 1.Main page 
 ![MainPage](https://user-images.githubusercontent.com/80245390/134447998-2d5a3299-3189-4b52-969a-cb83ca0c48e6.JPG)
