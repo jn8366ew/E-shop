@@ -19,7 +19,7 @@ Implemented by Team Orange and Bryan
 * Store products in cart 
 * Cart Sync between unregistered users and members   
 * CRUD Review on a product 
-* Applying Coupon 
+* Applying coupon 
 * Purchasing products with Braintree API
 
 ## Site Demo 
@@ -49,7 +49,7 @@ Implemented by Team Orange and Bryan
 ![checkout](https://user-images.githubusercontent.com/80245390/134448750-5769e172-5ecd-40ce-bf12-bd0836a8d100.JPG)
 <br><br>
 
-### 6.User Dashboard(Purchasing history)
+### 6.User dashboard(Purchasing history)
 ![Dashboard](https://user-images.githubusercontent.com/80245390/134448892-55ac2def-cea4-4ebe-a92a-00b096811e78.JPG)
 <br><br>
 
@@ -57,5 +57,5 @@ Implemented by Team Orange and Bryan
 ![sgsf](https://user-images.githubusercontent.com/80245390/134449222-681f9f81-8aff-4119-b508-b1cddf8181d3.JPG)
 <br><br>
 
-## Current Status
+## Current status
 * Under contrcution for deployment 
