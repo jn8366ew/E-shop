@@ -22,8 +22,18 @@ Implemented by Team Orange and Bryan
 * Applying coupon 
 * Purchasing products with Braintree API
 
-## Site Demo
+## Site link
 https://sscportdemo.info
+
+## Project database diagram 
+coming soon 
+
+## Backend model structure diagram
+
+## Backend request api(samples)
+https://documenter.getpostman.com/view/17693980/UUxzAnUg
+
+## Site demo
 
 ### General site flow with a member
 ![flow](https://user-images.githubusercontent.com/80245390/134449014-7a23625f-52ce-4ee8-a28a-270f5e51e906.gif)
@@ -58,4 +68,4 @@ https://sscportdemo.info
 <br><br>
 
 ## Current status
-* Under contrcution for deployment 
+* Q/A and Refactoring 
