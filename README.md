@@ -4,6 +4,9 @@ Implemented by Team Orange and Bryan
 ## Description 
 * A e-commerce web application implemented with Django and React  
 
+## Site link
+https://sscportdemo.info
+
 ## Requirments 
 * Python (3.9.2)
 * Django (3.2.5)
@@ -22,16 +25,6 @@ Implemented by Team Orange and Bryan
 * Applying coupon 
 * Purchasing products with Braintree API
 
-## Site link
-https://sscportdemo.info
-
-## Project database diagram 
-coming soon 
-
-## Backend model structure diagram
-
-## Backend request api(samples)
-https://documenter.getpostman.com/view/17693980/UUxzAnUg
 
 ## Site demo
 
@@ -69,3 +62,15 @@ https://documenter.getpostman.com/view/17693980/UUxzAnUg
 
 ## Current status
 * Q/A and Refactoring 
+
+
+# Development documents
+
+## Project database diagram 
+coming soon 
+
+## Backend model structure diagram
+
+## Backend request api(samples)
+https://documenter.getpostman.com/view/17693980/UUxzAnUg
+
