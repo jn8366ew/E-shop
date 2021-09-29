@@ -1,8 +1,8 @@
 # E-shop
 Implemented by Team Orange and Bryan 
 
-## Desciprtion 
-* Version 
+## Description 
+* A e-commerce web application implemented with Django and React  
 
 ## Requirments 
 * Python (3.9.2)
@@ -12,7 +12,7 @@ Implemented by Team Orange and Bryan
 * React (17.0.2)
 * Postgresql (11) 
  
-## Functionality
+## Feature
 * User authentication(Registration, Login, Google OAuth2)
 * User dashboard 
 * Ordering products 
