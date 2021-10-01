@@ -176,7 +176,7 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    # 이메일로 로그인
+    
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
@@ -199,8 +199,8 @@ DJOSER = {
     }
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '57886478363-oeu9ogrs8o7ktoavte6csb5fksaap29n.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'VAxGKeE3PW_0sWjvafNu3YV5'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',
@@ -210,14 +210,14 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 
 BT_ENVIRONMENT = 'sandbox'
 BT_MERCHANT_ID = 'p26gkw7zzs999tfr'
-BT_PUBLIC_KEY = 'nwd26p23tq6n6ccs'
-BT_PRIVATE_KEY = 'b18642e9c22112b4579504310f010c67'
+BT_PUBLIC_KEY = ''
+BT_PRIVATE_KEY = ''
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
-SOCIAL_AUTH_FACEBOOK_KEY = '815302215793103'
-SOCIAL_AUTH_FACEBOOK_SECRET = '2d80118eb189e272dc01455537749af8'
+SOCIAL_AUTH_FACEBOOK_KEY = ''
+SOCIAL_AUTH_FACEBOOK_SECRET = ''
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'email, first_name, last_name'
@@ -240,7 +240,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ilsanmwfshop@gmail.com'
-EMAIL_HOST_PASSWORD = 'otwfymsqhaknasds'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 
 
