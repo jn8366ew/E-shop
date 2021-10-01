@@ -21,7 +21,7 @@ const landingPage = ({
             <h1 className='display-4'>Welcome to E-shop!</h1>
             <p className='lead'></p>
             <hr className='my-4' />
-            <Link className='btn btn-primary btn-lg' to='/shop'>Go to Shop</Link>
+            <Link className='btn btn-danger btn-lg' to='/shop'>SHOP NOW</Link>
         </div>
 
         <section>

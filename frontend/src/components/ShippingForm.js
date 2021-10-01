@@ -56,7 +56,7 @@ const shippingForm = ({
                 placeholder={`${profile.address_line_2}`}
                 onChange={e => onChange(e)}
                 value={address_line_2}
-                required
+
             />
         </div>
         <div className='form-group'>

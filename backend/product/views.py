@@ -74,7 +74,7 @@ class ListProductsView(APIView):
             limit = 6
 
 
-        # order의 값이 'desc'일 경우 내림차순으로 정렬
+
         if order == 'desc':
             sort_by = '-' + sort_by
             products = Product.objects.order_by(sort_by).all()[:int(limit)]

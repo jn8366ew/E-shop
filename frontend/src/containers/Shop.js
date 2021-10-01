@@ -144,7 +144,7 @@ const Shop = ({
                  }}
             >
 
-                <h1 className='display-4'>Shop Page</h1>
+                <h1 className='display-4'>Products</h1>
                 <p className='lead'>
                     We hope you to have exciting experience
                 </p>

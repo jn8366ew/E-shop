@@ -13,13 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)e@91b_ygl&pp^%8i1us(fg+=(09h^t)(qvsy%e$xfk91&85vz'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -30,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
@@ -54,6 +49,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -85,18 +81,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Shop.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shop',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-    }
-}
 
 
 # Password validation
@@ -141,6 +125,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -170,7 +155,6 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    # 이메일로 로그인
     'LOGIN_FIELD': 'email',
     'USER_CREATE_PASSWORD_RETYPE': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
@@ -184,7 +168,7 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000/google', 'http://localhost:8000/facebook'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['https://sscportdemo.info/google', 'https://sscportdemo.info/facebook'],
     'SERIALIZERS': {
         'user_create': 'user.serializers.UserCreateSerializer',
         'user': 'user.serializers.UserCreateSerializer',
@@ -193,34 +177,8 @@ DJOSER = {
     }
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '57886478363-oeu9ogrs8o7ktoavte6csb5fksaap29n.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'VAxGKeE3PW_0sWjvafNu3YV5'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'openid'
-]
+FILE_UPLOAD_PERMISSIONS = 0o640
 
-
-BT_ENVIRONMENT = 'sandbox'
-BT_MERCHANT_ID = 'p26gkw7zzs999tfr'
-BT_PUBLIC_KEY = 'nwd26p23tq6n6ccs'
-BT_PRIVATE_KEY = 'b18642e9c22112b4579504310f010c67'
-
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
-
-SOCIAL_AUTH_FACEBOOK_KEY = '815302215793103'
-SOCIAL_AUTH_FACEBOOK_SECRET = '2d80118eb189e272dc01455537749af8'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'email, first_name, last_name'
-}
-
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
-]
 
 AUTH_USER_MODEL = 'user.UserAccount'
 
@@ -230,11 +188,9 @@ AUTH_USER_MODEL = 'user.UserAccount'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ilsanmwfshop@gmail.com'
-EMAIL_HOST_PASSWORD = 'otwfymsqhaknasds'
-EMAIL_USE_TLS = True
 
+try:
+    from .local_settings import *
 
+except ImportError:
+    pass

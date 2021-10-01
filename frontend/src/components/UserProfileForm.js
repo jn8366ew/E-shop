@@ -15,7 +15,7 @@ const userProfileForm = ({
 }) => (
     <div className='card mb-5'>
         <h3 className='card-header'>
-             User Profile
+             My Profile
         </h3>
          <form onSubmit={e => onSubmit(e)}>
               <ul className='list-group'>

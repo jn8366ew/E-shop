@@ -9,7 +9,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+backend/build/
+frontend/build/
 develop-eggs/
 dist/
 downloads/
@@ -19,8 +20,9 @@ lib/
 lib64/
 parts/
 sdist/
+backend/static
 var/
-wheels/
+wheels/s
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -268,7 +270,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+backend/build/
 develop-eggs/
 dist/
 downloads/
@@ -435,7 +437,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+backend/build/Release
 
 # Dependency directories
 node_modules/
@@ -731,7 +733,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+backend/build/Release
 
 # Dependency directories
 node_modules/
@@ -849,7 +851,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+backend/build/Release
 
 # Dependency directories
 node_modules/
@@ -1109,7 +1111,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+backend/build/
 develop-eggs/
 dist/
 downloads/
@@ -1263,7 +1265,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+backend/build/
 develop-eggs/
 dist/
 downloads/
@@ -1529,7 +1531,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
+backend/build/Release
 
 # Dependency directories
 node_modules/

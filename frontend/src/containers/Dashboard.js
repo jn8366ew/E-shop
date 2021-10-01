@@ -37,7 +37,7 @@ const DashBoard = ({
         state_province_region: '',
         postal_zip_code: '',
         telephone_number: '',
-        country_region: 'Repulic of Korea, South'
+        country_region: 'Republic of Korea, South'
     });
 
     const {
@@ -155,7 +155,7 @@ const DashBoard = ({
         return (
             <div className='card mb-5'>
                 <h3 className= 'card-header'>
-                    Purchase History
+                    Order History
                 </h3>
                 <div className='card-body'>
                     {
@@ -296,7 +296,7 @@ const DashBoard = ({
                 <div className='col-3'>
                     <div className='card'>
                         <h3 className='card-header'>
-                            Dashboard Links
+                            DashBoard Menu
                         </h3>
                             <ul className='list-group'>
                                 <li
@@ -306,9 +306,9 @@ const DashBoard = ({
                                 >
                                     {
                                         display === 'user_info' ? (
-                                            <strong>User Info</strong>
+                                            <strong>My Info</strong>
                                         ) : (
-                                            <Fragment>User Info</Fragment>
+                                            <Fragment>My Info</Fragment>
                                         )
                                     }
                                 </li>
@@ -319,9 +319,9 @@ const DashBoard = ({
                                 >
                                     {
                                         display === 'profile_info' ? (
-                                            <strong>User Profile</strong>
+                                            <strong>My Profile</strong>
                                         ) : (
-                                            <Fragment>User Profile</Fragment>
+                                            <Fragment>My Profile</Fragment>
                                         )
                                     }
                                 </li>
@@ -333,9 +333,9 @@ const DashBoard = ({
                                 >
                                     {
                                         display === 'purchase_history' ? (
-                                            <strong>Purchase History</strong>
+                                            <strong>Order History</strong>
                                         ) : (
-                                            <Fragment>Purchase History</Fragment>
+                                            <Fragment>Order History</Fragment>
                                         )
                                     }
 

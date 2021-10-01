@@ -67,24 +67,23 @@ const Navbar = ({
 
         const guestLinks = (
             <Fragment>
-                <li className='nav-item'>
-                    <NavLink
-                        className='nav-link mt-1'
-                        to='/login'
-                    >
+                    <li className='nav-item'>
+                        <NavLink
+                            className='nav-link mt-1'
+                            to='/login'
+                        >
+                            Login
+                        </NavLink>
+                    </li>
 
-                        Login
-                    </NavLink>
-                </li>
-
-                <li className='nav-item'>
-                    <NavLink
-                        className='nav-link mt-1'
-                        to='/signup'
-                    >
-                        Sign Up
-                    </NavLink>
-                </li>
+                    <li className='nav-item'>
+                        <NavLink
+                            className='nav-link mt-1'
+                            to='/signup'
+                        >
+                            Sign Up
+                        </NavLink>
+                    </li>
             </Fragment>
         );
 
@@ -102,12 +101,9 @@ const Navbar = ({
         }
 
 
-
-
-
         const getNavbar = () => (
             <nav className='navbar navbar-expand-lg navbar-light bg-light'>
-                <Link className='navbar-brand' to='/'>Shop</Link>
+                <Link className='navbar-brand' to='/'>E-Shop</Link>
                 <button
                     className='navbar-toggler'
                     type='button'
@@ -121,15 +117,7 @@ const Navbar = ({
                 </button>
                 <div className='collapse navbar-collapse' id='navbarNav'>
                     <ul className='navbar-nav'>
-                        <li className='nav-item'>
-                            <NavLink
-                                className='nav-link mt-1'
-                                exact
-                                to='/'
-                            >
-                                Home
-                            </NavLink>
-                        </li>
+
 
                         {isAuthenticated ? dashBoard() : <Fragment></Fragment>}
                         <SearchBox

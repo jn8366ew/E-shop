@@ -13,16 +13,20 @@ const GoToCart = () => (
             {/* <link rel="canonical" href="http://mysite.com/example" /> */}
         </Helmet>
         <h2 className='text-muted mb-5'>
-            Would you like to go to your cart or continue to checkout?
+            Would you like to back to shop or go to cart or checkout?
         </h2>
         <div className='card'>
             <div className='card-body'>
-                <Link className='btn btn-warning' to='/cart'>
-                    Go to Cart
+                <Link className='btn btn-primary' to='/shop'>
+                    Shop
                 </Link>
-                <span className='text-muted ml-3 mr-3'>or</span>
-                <Link className='btn btn-primary' to='/checkout'>
-                    Proceed to Checkout
+                <span className='text-muted ml-3 mr-3'> </span>
+                <Link className='btn btn-warning' to='/cart'>
+                    Cart
+                </Link>
+                <span className='text-muted ml-3 mr-3'> </span>
+                <Link className='btn btn-success' to='/checkout'>
+                    Checkout
                 </Link>
             </div>
         </div>

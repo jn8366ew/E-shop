@@ -11,7 +11,7 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.TextField()
-    date_created = models.DateTimeField(default=timezone.now())
+    date_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.comment
