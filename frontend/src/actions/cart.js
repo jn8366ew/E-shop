@@ -322,7 +322,7 @@ export const remove_item = item => async dispatch => {
         if (localStorage.getItem('cart')) {
             cart = JSON.parse(localStorage.getItem('cart'));
             cart.map((cart_item) => {
-                // 카트아이템에 있는 상품 ID가 item내에 있는 상품id와 다른경우 cart_item을 새로운 카트에 갱신
+
                 if (cart_item.product.id.toString() !== item.product.id.toString()) {
                     new_cart.push(cart_item);
                 }

@@ -12,7 +12,7 @@ export const get_categories = () => async dispatch => {
         }
     };
 
-    // backend/categoty/views.py, urls와 연동
+
     try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/category/categories`, config);
 

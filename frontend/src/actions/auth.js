@@ -30,8 +30,6 @@ import {
     GOOGLE_AUTH_FAIL,
     FACEBOOK_AUTH_SUCCESS,
     FACEBOOK_AUTH_FAIL
-
-
 } from "./types";
 
 export const check_authenticated = () => async dispatch => {
@@ -478,7 +476,7 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
         dispatch({
             type: REMOVE_AUTH_LOADING
         });
-        dispatch(setAlert('Password do not mach', 'danger'));
+        dispatch(setAlert('Password does not mach', 'danger'));
 
     } else {
         try {
@@ -499,7 +497,7 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
                 dispatch({
                     type:REMOVE_AUTH_LOADING
                 });
-                dispatch(setAlert('Error duing reset passwoord', 'danger'));
+                dispatch(setAlert('Error during reset password', 'danger'));
 
             }
         } catch (err) {
@@ -509,7 +507,7 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
             dispatch({
                 type:REMOVE_AUTH_LOADING
             });
-            dispatch(setAlert('Error duing reset passwoord', 'danger'));
+            dispatch(setAlert('Error during reset password', 'danger'));
         }
     }
 

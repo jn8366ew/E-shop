@@ -4,6 +4,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.idea
+/backend/Shop/settings.py
+/backend/Shop/local_settings.py
+
+
+
+/backend/public
+/backend/media
+
 # C extensions
 *.so
 
@@ -186,6 +195,9 @@ cython_debug/
 # .idea/modules
 # *.iml
 # *.ipr
+
+
+
 
 # CMake
 cmake-build-*/

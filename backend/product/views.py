@@ -6,6 +6,8 @@ from .serializers import ProductSerializer
 from category.models import Category
 from django.db.models import Q
 
+from .filter_funcs import filter_by_category
+
 
 
 class ReadProductView(APIView):
@@ -22,7 +24,7 @@ class ReadProductView(APIView):
             product_id = int(productId)
         except:
             return Response({'error': 'Product ID must be an integer'},
-                            status=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_404_NOT_FOUNDr)
 
 
         # check a product associated with product_id whether exists
@@ -130,6 +132,7 @@ class ListSearchView(APIView):
             return Response({'search_products': search_results.data},
                              status=status.HTTP_200_OK)
 
+
         # check category id whether exists.
         if not Category.objects.filter(id=category_id).exists():
             return Response({'Error': 'Category not found.'},
@@ -138,36 +141,9 @@ class ListSearchView(APIView):
 
         category = Category.objects.get(id=category_id)
 
-        # If this category has a parents, retrieve products related to the category.
-        if category.parent:
-            search_results = search_results.order_by(
-                '-date_created'
-            ).filter(category=category)
-
-        # If this category does not have parents,
-        else:
-            # and does not have children, then retrieve product with this category.
-            if not Category.objects.filter(parent=category).exists():
-                search_results = search_results.order_by(
-                    '-date_created'
-                ).filter(category=category)
-
-            # and does have children, then it includes its children.
-            else:
-                categories = Category.objects.filter(parent=category)
-
-                # append and loop through this category
-                filtered_categories = [category]
-                for cat in categories:
-                    filtered_categories.append(cat)
-
-                # convert categories to immutable type
-                filtered_categories = tuple(filtered_categories)
-
-                # retrieve products with categories
-                search_results = search_results.order_by(
-                    '-date_created'
-                ).filter(category__in=filtered_categories)
+        # Refactored statements (Oct/3/2021)
+        search_results = filter_by_category(category, search_results)
+        search_results = search_results.order_by('-date_created')
 
 
         # setting a nested serializer as we might have mutiple products
@@ -179,6 +155,39 @@ class ListSearchView(APIView):
 
 
 
+def filter_by_category(category, previous_results=None):
+    # If category has a parent, filter only by this category and not the parent as well
+    if category.parent:
+        if previous_results:
+            return previous_results.filter(category=category)
+        else:
+            return Product.objects.filter(category=category)
+    else:
+        # If this parent category does not have any children categories
+        # then just filter by the category itself
+        if not Category.objects.filter(parent=category).exists():
+            if previous_results:
+                return previous_results.filter(category=category)
+            else:
+                return Product.objects.filter(category=category)
+        # If this parent category has children, filter by both the parent category and it's children
+        else:
+            categories = Category.objects.filter(parent=category)
+            filtered_categories = [category]
+
+            for cat in categories:
+                filtered_categories.append(cat)
+
+            filtered_categories = tuple(filtered_categories)
+            if previous_results:
+                return previous_results.filter(category__in=filtered_categories)
+            else:
+                return Product.objects.filter(category__in=filtered_categories)
+
+
+
+
+
 class ListRelatedView(APIView):
     """
     A view to retrieve products based on
@@ -186,8 +195,8 @@ class ListRelatedView(APIView):
     for any user.
 
     url: api/products/related/<productId>
+    Refactored statements: 2021/10/3
     """
-
     permission_classes = (permissions.AllowAny, )
 
     def get(self, request, productId, format=None):
@@ -207,34 +216,9 @@ class ListRelatedView(APIView):
         category = Product.objects.get(id=product_id).category
 
         if Product.objects.filter(category=category).exists():
-            # If this category has a parents, retrieve products related to the category
-            if category.parent:
-                related_products = Product.objects.order_by(
-                    '-sold'
-                ).filter(category=category)
-            # If this category does not have parents
-            else:
-                # and does not have children, retrieve products with the category
-                if not Category.objects.filter(parent=category).exists():
-                    related_products = Product.objects.order_by(
-                        '-sold'
-                    ).filter(category=category)
 
-                # and does have children, retrieve products with sub-categories
-                else:
-                    categories = Category.objects.filter(parent=category)
-                    filtered_categories = [category]
-
-                    for cat in categories:
-                        filtered_categories.append(cat)
-
-                    filtered_categories = tuple(filtered_categories)
-                    related_products = Product.objects.order_by(
-                        '-sold'
-                    ).filter(category__in=filtered_categories)
-
-            # exclude a product from a queryset with product_id
-            related_products = related_products.exclude(id=product_id)
+            # Refactored statements (Oct/3/2021)
+            related_products = filter_by_category(category)
             related_products = ProductSerializer(related_products, many=True)
 
 
@@ -299,25 +283,7 @@ class ListBySearchView(APIView):
 
         else:
             category = Category.objects.get(id=category_id)
-
-            if category.parent:
-                product_results = Product.objects.filter(category=category)
-            else:
-
-                if not Category.objects.filter(parent=category).exists():
-                    product_results = Product.objects.filter(category=category)
-
-                else:
-                    categories = Category.objects.filter(parent=category)
-
-                    filtered_categories = [category]
-
-                    for cat in categories:
-                        filtered_categories.append(cat)
-
-                    filtered_categories = tuple(filtered_categories)
-                    product_results = Product.objects.filter(
-                        category__in=filtered_categories)
+            product_results = filter_by_category(category)
 
         # Filtering based on price_range
         if price_range == '1 - 19':
