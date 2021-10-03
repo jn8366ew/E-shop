@@ -63,6 +63,9 @@ Implemented by Team Orange and Bryan
 * Code review, gathering feedback, and continueous improvement 
 <br><br>
 
+## Version description
+* Code refactored in /product/views.py 
+
 ## Major feedback 
 - Follow correct code convention and pythonic 
 - Pagination for better webpage performance 
